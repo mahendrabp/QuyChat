@@ -114,6 +114,7 @@ class Login extends Component {
       <View
         style={{
           display: 'flex',
+          flex: 1,
           height: '100%',
           justifyContent: 'center',
         }}>
@@ -121,9 +122,10 @@ class Login extends Component {
           style={{
             width: '90%',
             height: '90%',
-
             alignSelf: 'center',
             paddingVertical: 70,
+            flex: 1,
+            marginTop: 10,
           }}>
           <View style={{alignItems: 'center'}}>
             <Image
@@ -138,7 +140,7 @@ class Login extends Component {
           <View style={{marginVertical: 20}}>
             <Item regular error>
               <Input
-                placeHolder="email anda"
+                placeholder="email anda"
                 onChangeText={email => this.setState({email})}
               />
               <Icon name="close-circle" />
@@ -147,7 +149,7 @@ class Login extends Component {
           <View>
             <Item regular success last>
               <Input
-                placeHolder="password anda"
+                placeholder="password anda"
                 onChangeText={password => this.setState({password})}
               />
               <Icon name="checkmark-circle" />
