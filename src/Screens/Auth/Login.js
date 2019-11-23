@@ -1,4 +1,4 @@
-import {StyleSheet, Text, TextInput, View, Button} from 'react-native';
+import {StyleSheet, Text, TextInput, View, Button, Alert} from 'react-native';
 import * as firebase from 'firebase';
 import React, {Component} from 'react';
 // import firebaseSDK from '../../Configs/firebaseSDK';
@@ -22,44 +22,55 @@ class Login extends Component {
       email: '',
       password: '',
       phone: '',
-      error: '',
-      loading: false,
+      isError: '',
+      isLoading: false,
     };
   }
 
-  //   state = {
-  //     name: 'Bima',
-  //     email: 'bima@quychat.com',
-  //     password: '123456',
-  //     avatar: '',
-  //   };
-
-  onPressLogin = async () => {
-    const user = {
-      name: this.state.name,
-      email: this.state.email,
-      password: this.state.password,
-      avatar: this.state.avatar,
-    };
-
-    const response = firebaseSDK.login(
-      user,
-      this.loginSuccess,
-      this.loginFailed,
-    );
+  onChangeEmail = value => {
+    let validationRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    if (validationRegex.test(value) === false) {
+      this.setState({
+        email: value,
+        isEmailValid: false,
+        invalidEmailMessage: 'email tidak valid',
+      });
+    } else if (value === '' || value === null) {
+      this.setState({
+        email: value,
+        isEmailValid: false,
+        invalidEmailMessage: 'email tidak boleh kosong',
+      });
+    } else {
+      this.setState({
+        email: value,
+        isEmailValid: true,
+      });
+    }
   };
 
-  loginSuccess = () => {
-    console.log('login successful, navigate to chat.');
-    this.props.navigation.navigate('ChatRoom', {
-      name: this.state.name,
-      email: this.state.email,
-      avatar: this.state.avatar,
+  handleLogin = async () => {
+    //init state when click
+    this.setState({
+      isError: '',
+      isLoading: true,
     });
-  };
 
-  loginFailed = () => {
-    alert('Login failure. Please tried again.');
+    const {email, password} = this.state;
+    await firebase
+      .auth()
+      .signInWithEmailAndPassword(email, password)
+      .then(() => {
+        this.setState({
+          isError: '',
+          isLoading: false,
+        });
+        this.props.navigation.navigate('ChatRoom', {email: this.state.email});
+      })
+      .catch(() => {
+        this.setState({error: 'Authentication Failed', loading: false});
+        Alert.alert('Eror', 'email atau password salah');
+      });
   };
 
   onChangeTextEmail = email => this.setState({email});
@@ -72,20 +83,18 @@ class Login extends Component {
         <TextInput
           style={styles.nameInput}
           placeHolder="email anda"
-          onChangeText={this.onChangeTextEmail}
-          value={this.state.email}
+          onChangeText={email => this.setState({email})}
         />
         <Text style={styles.title}>Password:</Text>
         <TextInput
           style={styles.nameInput}
           placeHolder="password anda"
-          onChangeText={this.onChangeTextPassword}
-          value={this.state.password}
+          onChangeText={password => this.setState({password})}
         />
         <Button
           title="Login"
           style={styles.buttonText}
-          onPress={this.onPressLogin}
+          onPress={this.handleLogin}
         />
 
         <Button
