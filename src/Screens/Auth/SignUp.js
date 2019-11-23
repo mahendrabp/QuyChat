@@ -1,4 +1,15 @@
-import {StyleSheet, Text, TextInput, View, Button, Alert} from 'react-native';
+import {StyleSheet, TextInput, ToastAndroid} from 'react-native';
+import {
+  Container,
+  View,
+  Item,
+  Input,
+  Text,
+  Thumbnail,
+  Button,
+  Toast,
+  Spinner,
+} from 'native-base';
 import * as firebase from 'firebase';
 import React, {Component} from 'react';
 // import firebaseSDK from '../../Configs/firebaseSDK';
@@ -22,8 +33,10 @@ class Login extends Component {
       email: '',
       password: '',
       phone: '',
+      name: '',
       isError: '',
       isLoading: false,
+      showToast: false,
     };
   }
 
@@ -49,7 +62,7 @@ class Login extends Component {
     }
   };
 
-  handleLogin = async () => {
+  handleSignUp = async () => {
     //init state when click
     this.setState({
       isError: '',
@@ -59,17 +72,43 @@ class Login extends Component {
     const {email, password} = this.state;
     await firebase
       .auth()
-      .signInWithEmailAndPassword(email, password)
-      .then(() => {
-        this.setState({
-          isError: '',
-          isLoading: false,
-        });
-        this.props.navigation.navigate('ChatRoom', {email: this.state.email});
+      .createUserWithEmailAndPassword(email, password)
+      .then(async () => {
+        const user = firebase.auth().currentUser;
+        const dbUser = firebase.database().ref(`/users/${user.uid}`);
+
+        return dbUser
+          .set({
+            email: this.state.email,
+            name: this.state.name,
+            phone: this.state.phone,
+            avatar: `https://ui-avatars.com/api/?rounded=true&name=${this.state.name}`,
+          })
+          .then(() => dbUser.once('value'))
+          .then(snapshot => ({auth: user, snapshot}));
       })
-      .catch(() => {
-        this.setState({error: 'Authentication Failed', loading: false});
-        Alert.alert('Eror', 'email atau password salah');
+      .then(({auth, snapshot}) => {
+        const data = snapshot.val();
+        // return AsyncStorage.setItem(
+        //   'user:data',
+        //   JSON.stringify({uid: auth.uid, ...data}),
+        // );
+      })
+      .then(() => {
+        ToastAndroid.showWithGravity(
+          'Berhasil',
+          ToastAndroid.SHORT,
+          ToastAndroid.CENTER,
+        );
+        this.props.navigation.navigate('Login');
+      })
+      .catch(err => {
+        ToastAndroid.showWithGravity(
+          `${err.message}`,
+          ToastAndroid.SHORT,
+          ToastAndroid.CENTER,
+        );
+        return false;
       });
   };
 
@@ -85,6 +124,18 @@ class Login extends Component {
           placeHolder="email anda"
           onChangeText={email => this.setState({email})}
         />
+        <Text style={styles.title}>Nama:</Text>
+        <TextInput
+          style={styles.nameInput}
+          placeHolder="Nama anda"
+          onChangeText={name => this.setState({name})}
+        />
+        <Text style={styles.title}>Telepon:</Text>
+        <TextInput
+          style={styles.nameInput}
+          placeHolder="Telepon anda"
+          onChangeText={phone => this.setState({phone})}
+        />
         <Text style={styles.title}>Password:</Text>
         <TextInput
           style={styles.nameInput}
@@ -94,13 +145,13 @@ class Login extends Component {
         <Button
           title="Login"
           style={styles.buttonText}
-          onPress={this.handleLogin}
+          onPress={() => this.props.navigation.navigate('Login')}
         />
 
         <Button
           title="Signup"
           style={styles.buttonText}
-          onPress={() => this.props.navigation.navigate('SignUp')}
+          onPress={this.handleSignUp}
         />
       </View>
     );
