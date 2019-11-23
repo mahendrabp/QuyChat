@@ -75,16 +75,15 @@ class Login extends Component {
       .createUserWithEmailAndPassword(email, password)
       .then(async () => {
         const user = firebase.auth().currentUser;
-        const dbUser = firebase.database().ref(`/users/${user.uid}`);
-
-        return dbUser
+        const databaseUser = firebase.database().ref(`/users/${user.uid}`);
+        return databaseUser
           .set({
             email: this.state.email,
             name: this.state.name,
             phone: this.state.phone,
             avatar: `https://ui-avatars.com/api/?rounded=true&name=${this.state.name}`,
           })
-          .then(() => dbUser.once('value'))
+          .then(() => databaseUser.once('value'))
           .then(snapshot => ({auth: user, snapshot}));
       })
       .then(({auth, snapshot}) => {
@@ -95,19 +94,21 @@ class Login extends Component {
         // );
       })
       .then(() => {
-        ToastAndroid.showWithGravity(
-          'Berhasil',
-          ToastAndroid.SHORT,
-          ToastAndroid.CENTER,
-        );
+        Toast.show({
+          text: 'Berhasil Register',
+          position: 'bottom',
+          duration: 2000,
+          type: 'success',
+        });
         this.props.navigation.navigate('Login');
       })
       .catch(err => {
-        ToastAndroid.showWithGravity(
-          `${err.message}`,
-          ToastAndroid.SHORT,
-          ToastAndroid.CENTER,
-        );
+        Toast.show({
+          text: err.message,
+          buttonText: 'Okay',
+          type: 'warning',
+          duration: 2000,
+        });
         return false;
       });
   };
