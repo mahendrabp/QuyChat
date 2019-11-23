@@ -1,6 +1,17 @@
-import {StyleSheet, Text, TextInput, View, Button, Alert} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+  Alert,
+  Image,
+  TouchableOpacity,
+} from 'react-native';
+import {Form, Item, Label, Input, Icon, Button} from 'native-base';
 import * as firebase from 'firebase';
 import React, {Component} from 'react';
+import {WaveIndicator} from 'react-native-indicators';
+// import Icon from 'react-native-vector-icons/FontAwesome5';
 // import firebaseSDK from '../../Configs/firebaseSDK';
 // Initialize Firebase
 if (!firebase.apps.length) {
@@ -68,9 +79,31 @@ class Login extends Component {
         this.props.navigation.navigate('ChatRoom', {email: this.state.email});
       })
       .catch(() => {
-        this.setState({error: 'Authentication Failed', loading: false});
+        this.setState({error: 'Authentication Failed', isLoading: false});
         Alert.alert('Eror', 'email atau password salah');
       });
+  };
+
+  _renderBtnSignIn = () => {
+    if (this.state.isLoading == true) {
+      return <WaveIndicator color="#3C82FF" />;
+    } else {
+      return (
+        <View>
+          <Button
+            block
+            style={{
+              height: 50,
+              backgroundColor: '#3076E0',
+            }}
+            onPress={this.handleLogin}>
+            <Text style={{color: '#ffffff', fontWeight: 'bold', fontSize: 18}}>
+              MASUK
+            </Text>
+          </Button>
+        </View>
+      );
+    }
   };
 
   onChangeTextEmail = email => this.setState({email});
@@ -78,30 +111,65 @@ class Login extends Component {
 
   render() {
     return (
-      <View>
-        <Text style={styles.title}>Email:</Text>
-        <TextInput
-          style={styles.nameInput}
-          placeHolder="email anda"
-          onChangeText={email => this.setState({email})}
-        />
-        <Text style={styles.title}>Password:</Text>
-        <TextInput
-          style={styles.nameInput}
-          placeHolder="password anda"
-          onChangeText={password => this.setState({password})}
-        />
-        <Button
-          title="Login"
-          style={styles.buttonText}
-          onPress={this.handleLogin}
-        />
+      <View
+        style={{
+          display: 'flex',
+          height: '100%',
+          justifyContent: 'center',
+        }}>
+        <View
+          style={{
+            width: '90%',
+            height: '90%',
 
-        <Button
-          title="Signup"
-          style={styles.buttonText}
-          onPress={() => this.props.navigation.navigate('SignUp')}
-        />
+            alignSelf: 'center',
+            paddingVertical: 70,
+          }}>
+          <View style={{alignItems: 'center'}}>
+            <Image
+              source={require('../../Assets/Logo2.png')}
+              style={{width: 110, height: 110, borderRadius: 110 / 2}}
+            />
+          </View>
+          <View style={{alignItems: 'center', marginBottom: 60}}>
+            <Text style={{fontWeight: 'bold', fontSize: 20}}>QuyChat</Text>
+            <Text>Selamat Datang Kembali</Text>
+          </View>
+          <View style={{marginVertical: 20}}>
+            <Item regular error>
+              <Input
+                placeHolder="email anda"
+                onChangeText={email => this.setState({email})}
+              />
+              <Icon name="close-circle" />
+            </Item>
+          </View>
+          <View>
+            <Item regular success last>
+              <Input
+                placeHolder="password anda"
+                onChangeText={password => this.setState({password})}
+              />
+              <Icon name="checkmark-circle" />
+            </Item>
+          </View>
+
+          <View style={{marginVertical: 20, height: 20}}>
+            {this._renderBtnSignIn()}
+          </View>
+          <View
+            style={{
+              flexDirection: 'row',
+              marginVertical: 20,
+              justifyContent: 'center',
+            }}>
+            <Text>Belum punya akun ? </Text>
+            <TouchableOpacity
+              onPress={() => this.props.navigation.navigate('SignUp')}>
+              <Text style={styles.textBlue}>Daftar Disini.</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
       </View>
     );
   }
@@ -124,6 +192,10 @@ const styles = StyleSheet.create({
   buttonText: {
     marginLeft: 16,
     fontSize: 42,
+    width: '50%',
+  },
+  textBlue: {
+    color: '#3076E0',
   },
 });
 

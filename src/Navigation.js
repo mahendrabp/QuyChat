@@ -5,8 +5,15 @@ import {createStackNavigator} from 'react-navigation-stack';
 import ChatRoom from './Screens/Chat/ChatRoom';
 import Login from './Screens/Auth/Login';
 import SignUp from './Screens/Auth/SignUp';
+import Welcome from './Screens/Welcome';
 
 const MainNavigator = createStackNavigator({
+  Welcome: {
+    screen: Welcome,
+    navigationOptions: {
+      header: null,
+    },
+  },
   Login: {
     screen: Login,
     navigationOptions: {
