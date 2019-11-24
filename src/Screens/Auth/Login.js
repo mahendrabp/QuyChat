@@ -10,7 +10,7 @@ import {
 import {Form, Item, Label, Input, Icon, Button} from 'native-base';
 import * as firebase from 'firebase';
 import React, {Component} from 'react';
-import {WaveIndicator} from 'react-native-indicators';
+import {BarIndicator, SkypeIndicator} from 'react-native-indicators';
 // import Icon from 'react-native-vector-icons/FontAwesome5';
 // import firebaseSDK from '../../Configs/firebaseSDK';
 // Initialize Firebase
@@ -86,7 +86,7 @@ class Login extends Component {
 
   _renderBtnSignIn = () => {
     if (this.state.isLoading == true) {
-      return <WaveIndicator color="#3C82FF" />;
+      return <SkypeIndicator color="#3C82FF" />;
     } else {
       return (
         <View>

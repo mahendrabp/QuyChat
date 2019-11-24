@@ -289,7 +289,7 @@ class SignUp extends Component {
         });
         const avatar =
           'https://ui-avatars.com/api/?size=256&rounded=true&name=' +
-          this.state.name.replace(' ', '+');
+          this.state.username.replace(' ', '+');
         firebase
           .database()
           .ref(userCollection)

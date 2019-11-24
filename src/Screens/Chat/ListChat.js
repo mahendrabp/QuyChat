@@ -30,6 +30,7 @@ class ListChat extends React.Component {
       email: '',
       status: '',
       phone: '',
+      avatar: '',
       users: [],
     };
   }
