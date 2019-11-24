@@ -13,6 +13,7 @@ import Welcome from './Screens/Welcome';
 import ListChat from './Screens/Chat/ListChat';
 import ListMate from './Screens/Mate/ListMate';
 import InitNavigation from './Screens/InitNavigation';
+import Logout from './Screens/Auth/Logout';
 
 const TabNavigation = createMaterialBottomTabNavigator(
   {
@@ -33,6 +34,21 @@ const TabNavigation = createMaterialBottomTabNavigator(
     },
     ListMate: {
       screen: ListMate,
+      navigationOptions: {
+        tabBarLabel: 'Mate',
+        tabBarIcon: ({tintColor}) => (
+          <View>
+            <MaterialIcons
+              style={[{color: tintColor}]}
+              size={25}
+              name={'person'}
+            />
+          </View>
+        ),
+      },
+    },
+    Logout: {
+      screen: Logout,
       navigationOptions: {
         tabBarLabel: 'Mate',
         tabBarIcon: ({tintColor}) => (

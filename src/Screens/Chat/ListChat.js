@@ -20,6 +20,7 @@ import {
 } from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import * as firebase from 'firebase';
+import Menu, {MenuItem, MenuDivider} from 'react-native-material-menu';
 
 class ListChat extends React.Component {
   constructor(props) {
@@ -32,6 +33,20 @@ class ListChat extends React.Component {
       users: [],
     };
   }
+
+  _menu = null;
+
+  setMenuRef = ref => {
+    this._menu = ref;
+  };
+
+  hideMenu = () => {
+    this._menu.hide();
+  };
+
+  showMenu = () => {
+    this._menu.show();
+  };
 
   async getData() {
     this.setState({
@@ -56,29 +71,39 @@ class ListChat extends React.Component {
     return (
       <Container>
         <Header
-          style={{backgroundColor: '#252f4a'}}
-          androidStatusBarColor="#202a43"
+          style={{backgroundColor: '#1F95CC'}}
+          androidStatusBarColor="#1F95CC"
           noShadow={true}>
-          <View style={{flex: 1, paddingVertical: 15, paddingHorizontal: 7}}>
+          <View style={{flex: 1, paddingTop: 15}}>
             <Grid>
               <Row>
                 <Col>
-                  <Text style={{color: '#ffff', fontSize: 20}}>Chats</Text>
+                  <Text
+                    style={{
+                      color: '#ffff',
+                      fontSize: 20,
+                      marginLeft: 15,
+                      fontWeight: 'bold',
+                      fontFamily: 'Roboto',
+                    }}>
+                    QuyChat
+                  </Text>
                 </Col>
-                <Col>
-                  {/* <Row>
-                    <Col style={{ alignItems: 'flex-end' }}>
-                      <TouchableOpacity onPress={() => alert('Add Chat!')}>
-                        <Ionicons style={[{ color: '#ffff' }]} size={25} name={'ios-chatbubbles'} />
-                      </TouchableOpacity>
-                    </Col>
-                    <Col style={{ width: '20%', alignItems: 'flex-end', marginRight: 5 }}>
-                      <TouchableOpacity onPress={() => alert('More!')}>
-                        <Ionicons style={[{ color: '#ffff' }]} size={25} name={'md-more'} />
-                      </TouchableOpacity>
-                    </Col>
-                  </Row> */}
-                </Col>
+                <Menu
+                  ref={this.setMenuRef}
+                  button={
+                    <Icon
+                      active
+                      name="menu"
+                      style={{color: '#FFFFFF', marginRight: 15}}
+                      onPress={this.showMenu}
+                    />
+                  }>
+                  <MenuItem onPress={this.hideMenu}>Grup Baru</MenuItem>
+
+                  <MenuDivider />
+                  <MenuItem onPress={this.hideMenu}>Pengaturan</MenuItem>
+                </Menu>
               </Row>
             </Grid>
           </View>
@@ -87,16 +112,19 @@ class ListChat extends React.Component {
           <View style={styles.contentSearch}>
             <Item
               style={{
-                backgroundColor: '#323b54',
-                borderRadius: 7,
-                paddingHorizontal: 10,
+                backgroundColor: '#40A4D3',
+                borderRadius: 100,
                 borderColor: 'transparent',
               }}>
-              <Icon active name="search" style={{color: '#6f7687'}} />
               <Input
-                placeholder="Search"
-                placeholderTextColor="#6f7687"
-                style={{color: '#6f7687', height: 40}}
+                placeholder="cari percakapan"
+                placeholderTextColor="#FFFFFF"
+                style={{color: '#FFFFFF', height: 40, marginLeft: 15}}
+              />
+              <Icon
+                active
+                name="search"
+                style={{color: '#FFFFFF', marginRight: 15}}
               />
             </Item>
           </View>
@@ -143,8 +171,8 @@ class ListChat extends React.Component {
 
 const styles = StyleSheet.create({
   contentSearch: {
-    backgroundColor: '#252f4a',
-    paddingVertical: 7,
+    backgroundColor: '#1F95CC',
+    paddingBottom: 15,
     paddingHorizontal: 15,
   },
   contentChats: {
