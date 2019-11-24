@@ -76,7 +76,7 @@ class Login extends Component {
           isError: '',
           isLoading: false,
         });
-        this.props.navigation.navigate('ChatRoom', {email: this.state.email});
+        this.props.navigation.navigate('Mate', {email: this.state.email});
       })
       .catch(() => {
         this.setState({error: 'Authentication Failed', isLoading: false});

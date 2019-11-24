@@ -10,11 +10,14 @@ import ChatRoom from './Screens/Chat/ChatRoom';
 import Login from './Screens/Auth/Login';
 import SignUp from './Screens/Auth/SignUp';
 import Welcome from './Screens/Welcome';
+import ListChat from './Screens/Chat/ListChat';
+import ListMate from './Screens/Mate/ListMate';
+import InitNavigation from './Screens/InitNavigation';
 
 const TabNavigation = createMaterialBottomTabNavigator(
   {
-    Friend: {
-      screen: Friend,
+    ListMate: {
+      screen: ListMate,
       navigationOptions: {
         tabBarLabel: 'Friends',
         tabBarIcon: ({tintColor}) => (
@@ -43,21 +46,6 @@ const TabNavigation = createMaterialBottomTabNavigator(
         ),
       },
     },
-    More: {
-      screen: More,
-      navigationOptions: {
-        tabBarLabel: 'More',
-        tabBarIcon: ({tintColor}) => (
-          <View>
-            <Ionicons
-              style={[{color: tintColor}]}
-              size={25}
-              name={'ios-more'}
-            />
-          </View>
-        ),
-      },
-    },
   },
   {
     activeColor: '#202a43',
@@ -66,31 +54,43 @@ const TabNavigation = createMaterialBottomTabNavigator(
   },
 );
 
-const MainNavigator = createStackNavigator({
-  Welcome: {
-    screen: Welcome,
-    navigationOptions: {
-      header: null,
+const MainNavigator = createStackNavigator(
+  {
+    Welcome: {
+      screen: Welcome,
+      navigationOptions: {
+        header: null,
+      },
     },
-  },
-  Login: {
-    screen: Login,
-    navigationOptions: {
-      header: null,
+    Login: {
+      screen: Login,
+      navigationOptions: {
+        header: null,
+      },
     },
-  },
-  ChatRoom: {
-    screen: ChatRoom,
-    navigationOptions: {
-      header: null,
+    ChatRoom: {
+      screen: ChatRoom,
+      navigationOptions: {
+        header: null,
+      },
     },
-  },
-  SignUp: {
-    screen: SignUp,
-    navigationOptions: {
-      header: null,
+    SignUp: {
+      screen: SignUp,
+      navigationOptions: {
+        header: null,
+      },
     },
+    InitNavigation: {
+      screen: InitNavigation,
+    },
+    Mate: TabNavigation,
   },
-});
+  {
+    headerMode: 'none',
+    // initialRouteName: 'Maps',
+    initialRouteName: 'InitNavigation',
+    // initialRouteKey: 'Login',
+  },
+);
 
 export default createAppContainer(MainNavigator);
