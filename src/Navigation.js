@@ -16,21 +16,6 @@ import InitNavigation from './Screens/InitNavigation';
 
 const TabNavigation = createMaterialBottomTabNavigator(
   {
-    ListMate: {
-      screen: ListMate,
-      navigationOptions: {
-        tabBarLabel: 'Friends',
-        tabBarIcon: ({tintColor}) => (
-          <View>
-            <MaterialIcons
-              style={[{color: tintColor}]}
-              size={25}
-              name={'person'}
-            />
-          </View>
-        ),
-      },
-    },
     ListChat: {
       screen: ListChat,
       navigationOptions: {
@@ -41,6 +26,21 @@ const TabNavigation = createMaterialBottomTabNavigator(
               style={[{color: tintColor}]}
               size={25}
               name={'chat-processing'}
+            />
+          </View>
+        ),
+      },
+    },
+    ListMate: {
+      screen: ListMate,
+      navigationOptions: {
+        tabBarLabel: 'Mate',
+        tabBarIcon: ({tintColor}) => (
+          <View>
+            <MaterialIcons
+              style={[{color: tintColor}]}
+              size={25}
+              name={'person'}
             />
           </View>
         ),

@@ -218,9 +218,12 @@ class SignUp extends Component {
       password: '',
       phone: '',
       name: '',
+      username: '',
       isError: '',
+      avatar: '',
       isLoading: false,
       showToast: false,
+      isButtonDisabled: 'true',
     };
   }
 
@@ -253,53 +256,84 @@ class SignUp extends Component {
       isLoading: true,
     });
 
-    const {email, password} = this.state;
+    const {email, password, name, username, phone} = this.state;
+    //init this collection for firebase
+    const userCollection = '/users/' + this.state.phone;
+
+    //check if phone already in use or not
+    firebase
+      .database()
+      .ref(userCollection)
+      .on('value', snapshot => {
+        if (snapshot.val()) {
+          Toast.show({
+            text: 'no telepon telah di gunakan',
+            buttonText: 'Okay',
+            type: 'warning',
+            duration: 2000,
+          });
+          this.setState({
+            isError: '',
+            isLoading: false,
+          });
+          return false;
+        }
+      });
+
     await firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
-      .then(async () => {
-        const user = firebase.auth().currentUser;
-        const databaseUser = firebase.database().ref(`/users/${user.uid}`);
-        console.log(databaseUser);
-        return databaseUser
-          .set({
-            email: this.state.email,
-            name: this.state.name,
-            phone: this.state.phone,
-            avatar: `https://ui-avatars.com/api/?rounded=true&name=${this.state.name}`,
-          })
-          .then(() => databaseUser.once('value'))
-          .then(snapshot => ({auth: user, snapshot}));
-      })
-      .then(({auth, snapshot}) => {
-        const data = snapshot.val();
-        // return AsyncStorage.setItem(
-        //   'user:data',
-        //   JSON.stringify({uid: auth.uid, ...data}),
-        // );
-      })
-      .then(() => {
-        Toast.show({
-          text: 'Berhasil Daftar, Silahkan Login',
-          position: 'bottom',
-          duration: 2000,
-          type: 'success',
+      .then(result => {
+        result.user.updateProfile({
+          displayName: this.state.username,
         });
-        this.props.navigation.navigate('Login');
-      })
-      .catch(err => {
+        const avatar =
+          'https://ui-avatars.com/api/?size=256&rounded=true&name=' +
+          this.state.name.replace(' ', '+');
+        firebase
+          .database()
+          .ref(userCollection)
+          .set({
+            username,
+            email,
+            phone,
+            avatar: avatar,
+          })
+          .then(data => {
+            console.log('Data : ', data);
+          })
+          .catch(error => {
+            console.log('error', error);
+          });
+        // console.log(this.state.latitude);
         Toast.show({
-          text: err.message,
+          text: 'Akun QuyChat berhasil dibuat',
           buttonText: 'Okay',
-          type: 'warning',
+          type: 'success',
           duration: 2000,
         });
         this.setState({
-          isError: '',
+          email: '',
+          username: '',
+          phone: '',
+          password: '',
+        });
+        this.props.navigation.navigate('Login');
+      })
+      .catch(error => {
+        Toast.show({
+          text: error.message,
+          buttonText: 'Okay',
+          type: 'warning',
+          duration: 3000,
+        });
+        this.setState({
           isLoading: false,
         });
-        return false;
       });
+    this.setState({
+      isLoading: false,
+    });
   };
 
   _renderBtnSignIn = () => {
@@ -366,7 +400,7 @@ class SignUp extends Component {
             <Item regular success last>
               <Input
                 placeholder="nama anda"
-                onChangeText={name => this.setState({name})}
+                onChangeText={username => this.setState({username})}
               />
               <Icon name="checkmark-circle" />
             </Item>
@@ -435,3 +469,50 @@ const styles = StyleSheet.create({
 });
 
 export default SignUp;
+
+// await firebase
+//       .auth()
+//       .createUserWithEmailAndPassword(email, password)
+//       .then(async () => {
+//         const user = firebase.auth().currentUser;
+//         const databaseUser = firebase.database().ref(`/users/${user.uid}`);
+//         console.log(databaseUser);
+//         return databaseUser
+//           .set({
+//             email: this.state.email,
+//             name: this.state.name,
+//             phone: this.state.phone,
+//             avatar: `https://ui-avatars.com/api/?rounded=true&name=${this.state.name}`,
+//           })
+//           .then(() => databaseUser.once('value'))
+//           .then(snapshot => ({auth: user, snapshot}));
+//       })
+//       .then(({auth, snapshot}) => {
+//         const data = snapshot.val();
+//         // return AsyncStorage.setItem(
+//         //   'user:data',
+//         //   JSON.stringify({uid: auth.uid, ...data}),
+//         // );
+//       })
+//       .then(() => {
+//         Toast.show({
+//           text: 'Berhasil Daftar, Silahkan Login',
+//           position: 'bottom',
+//           duration: 2000,
+//           type: 'success',
+//         });
+//         this.props.navigation.navigate('Login');
+//       })
+//       .catch(err => {
+//         Toast.show({
+//           text: err.message,
+//           buttonText: 'Okay',
+//           type: 'warning',
+//           duration: 2000,
+//         });
+//         this.setState({
+//           isError: '',
+//           isLoading: false,
+//         });
+//         return false;
+//       });
