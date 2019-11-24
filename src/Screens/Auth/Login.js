@@ -89,19 +89,35 @@ class Login extends Component {
       return <SkypeIndicator color="#3C82FF" />;
     } else {
       return (
-        <View>
-          <Button
-            block
-            style={{
-              height: 50,
-              backgroundColor: '#3076E0',
-            }}
-            onPress={this.handleLogin}>
-            <Text style={{color: '#ffffff', fontWeight: 'bold', fontSize: 18}}>
-              MASUK
-            </Text>
-          </Button>
-        </View>
+        <>
+          {this.state.email.length > 3 && this.state.password.length > 3 ? (
+            <Button
+              block
+              style={{
+                height: 50,
+                backgroundColor: '#3076E0',
+              }}
+              onPress={this.handleLogin}>
+              <Text
+                style={{color: '#ffffff', fontWeight: 'bold', fontSize: 18}}>
+                MASUK
+              </Text>
+            </Button>
+          ) : (
+            <Button
+              block
+              disabled
+              style={{
+                height: 50,
+              }}
+              onPress={this.handleLogin}>
+              <Text
+                style={{color: '#ffffff', fontWeight: 'bold', fontSize: 18}}>
+                MASUK
+              </Text>
+            </Button>
+          )}
+        </>
       );
     }
   };
