@@ -1,5 +1,11 @@
 import React, {Component} from 'react';
-import {View, StyleSheet, TouchableOpacity} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  FlatList,
+  SafeAreaView,
+} from 'react-native';
 import {
   Container,
   Header,
@@ -11,16 +17,11 @@ import {
   Row,
   Input,
   Item,
-  List,
-  ListItem,
-  Left,
-  Thumbnail,
-  Body,
-  Right,
 } from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import * as firebase from 'firebase';
 import Menu, {MenuItem, MenuDivider} from 'react-native-material-menu';
+import {Avatar, Divider, TouchableRipple} from 'react-native-paper';
 
 class ListChat extends React.Component {
   constructor(props) {
@@ -59,6 +60,7 @@ class ListChat extends React.Component {
       .ref('users/')
       .on('value', snapshot => {
         const set = snapshot.val();
+        // console.log(set);
         this.setState({
           users: set,
         });
@@ -67,6 +69,7 @@ class ListChat extends React.Component {
 
   componentDidMount() {
     this.getData();
+    console.log(this.state.users);
   }
   render() {
     return (
@@ -133,33 +136,55 @@ class ListChat extends React.Component {
             {Object.keys(this.state.users)
               .filter(val => this.state.users[val].email !== this.state.email)
               .map(key => {
+                const {style, value, ...otherProps} = this.props;
                 return (
                   <>
-                    <List>
-                      <ListItem
-                        avatar
-                        noBorder
-                        button={true}
+                    <View>
+                      <TouchableRipple
                         onPress={() =>
                           this.props.navigation.navigate('ChatRoom', {
                             username: this.state.users[key].username,
                           })
-                        }>
-                        <Left>
-                          <Thumbnail
-                            source={{uri: `${this.state.users[key].avatar}`}}
-                          />
-                        </Left>
-                        <Body>
-                          <Text>{this.state.users[key].username}</Text>
-                          {/* <Text note>{this.state.users[key].email}</Text> */}
-                          <Text note>{this.state.users[key].status}.</Text>
-                        </Body>
-                        <Right style={{justifyContent: 'center'}}>
-                          {/* <Text note>{item.date}</Text> */}
-                        </Right>
-                      </ListItem>
-                    </List>
+                        }
+                        style={styles.touchable}>
+                        <Grid
+                          style={{
+                            marginBottom: 10,
+
+                            marginTop: 10,
+                          }}>
+                          <Col size={1}>
+                            <View>
+                              <Avatar.Image
+                                size={50}
+                                source={{
+                                  uri: `${this.state.users[key].avatar}`,
+                                }}
+                              />
+                            </View>
+                          </Col>
+                          <Col size={3}>
+                            <Text style={styles.name}>
+                              {this.state.users[key].username}
+                            </Text>
+                          </Col>
+                          <Col size={1}>
+                            <Row style={{alignItems: 'center'}}>
+                              <Col style={{alignItems: 'center'}}>
+                                <Text
+                                  style={{
+                                    fontSize: 15,
+                                    color: '#bcbdc6',
+                                  }}>
+                                  waktu
+                                </Text>
+                              </Col>
+                            </Row>
+                          </Col>
+                        </Grid>
+                      </TouchableRipple>
+                      <Divider style={styles.divider} />
+                    </View>
                   </>
                 );
               })}
@@ -181,6 +206,48 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
     paddingVertical: 5,
   },
+  touchable: {paddingHorizontal: 10, paddingVertical: 2},
+  item: {flex: 1, flexDirection: 'row', height: 70, alignItems: 'center'},
+  main: {
+    flex: 1,
+    paddingLeft: 15,
+    justifyContent: 'center',
+  },
+  desp: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingBottom: 6,
+  },
+  name: {fontWeight: 'bold', fontSize: 18, color: 'black'},
+  time: {fontSize: 14, color: 'grey'},
+  msg: {fontWeight: '400', fontSize: 14, color: 'grey'},
+  divider: {marginLeft: 72},
 });
 
 export default ListChat;
+
+{
+  /* <List>
+  <ListItem
+    avatar
+    noBorder
+    button={true}
+    onPress={() =>
+      this.props.navigation.navigate('ChatRoom', {
+        username: this.state.users[key].username,
+      })
+    }>
+    <Left>
+      <Thumbnail source={{uri: `${this.state.users[key].avatar}`}} />
+    </Left>
+    <Body>
+      <Text>{this.state.users[key].username}</Text>
+      <Text note>{this.state.users[key].email}</Text>
+      <Text note>{this.state.users[key].status}.</Text>
+    </Body>
+    <Right style={{justifyContent: 'center'}}>
+      <Text note>{item.date}</Text>
+    </Right>
+  </ListItem>
+</List> */
+}
