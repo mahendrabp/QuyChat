@@ -142,6 +142,7 @@ class Login extends Component {
               <Input
                 placeholder="email anda"
                 onChangeText={email => this.setState({email})}
+                onSubmitEditing={() => this.handleLogin}
               />
               <Icon name="close-circle" />
             </Item>
@@ -151,6 +152,7 @@ class Login extends Component {
               <Input
                 placeholder="password anda"
                 onChangeText={password => this.setState({password})}
+                onSubmitEditing={() => this.handleLogin}
               />
               <Icon name="checkmark-circle" />
             </Item>

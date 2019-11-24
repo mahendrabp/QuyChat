@@ -26,7 +26,7 @@
 //   });
 // }
 
-// class Login extends Component {
+// class SignUp extends Component {
 //   constructor(props) {
 //     super(props);
 //     this.state = {
@@ -179,7 +179,7 @@
 //   },
 // });
 
-// export default Login;
+// export default SignUp;
 
 import {
   StyleSheet,
@@ -260,6 +260,7 @@ class SignUp extends Component {
       .then(async () => {
         const user = firebase.auth().currentUser;
         const databaseUser = firebase.database().ref(`/users/${user.uid}`);
+        console.log(databaseUser);
         return databaseUser
           .set({
             email: this.state.email,
@@ -328,85 +329,83 @@ class SignUp extends Component {
 
   render() {
     return (
-      <KeyboardAwareScrollView>
+      <View
+        style={{
+          flex: 1,
+          display: 'flex',
+          justifyContent: 'center',
+        }}>
         <View
           style={{
+            width: '90%',
+            height: '90%',
+            alignSelf: 'center',
+            paddingVertical: 40,
             flex: 1,
-            display: 'flex',
-            justifyContent: 'center',
           }}>
+          <View style={{alignItems: 'center'}}>
+            <Image
+              source={require('../../Assets/Logo2.png')}
+              style={{width: 110, height: 110, borderRadius: 110 / 2}}
+            />
+          </View>
+          <View style={{alignItems: 'center', marginBottom: 40, flex: 1}}>
+            <Text style={{fontWeight: 'bold', fontSize: 20}}>QuyChat</Text>
+            <Text>QUY kita ngobrol bareng!</Text>
+          </View>
+          <View style={{marginVertical: 20}}>
+            <Item regular error>
+              <Input
+                placeholder="email anda"
+                onChangeText={email => this.setState({email})}
+              />
+              <Icon name="close-circle" />
+            </Item>
+          </View>
+          <View>
+            <Item regular success last>
+              <Input
+                placeholder="nama anda"
+                onChangeText={name => this.setState({name})}
+              />
+              <Icon name="checkmark-circle" />
+            </Item>
+          </View>
+          <View style={{marginVertical: 20}}>
+            <Item regular success last>
+              <Input
+                placeholder="telepon anda"
+                onChangeText={phone => this.setState({phone})}
+              />
+              <Icon name="checkmark-circle" />
+            </Item>
+          </View>
+          <View style={{display: 'flex'}}>
+            <Item regular success last>
+              <Input
+                placeholder="password anda"
+                onChangeText={password => this.setState({password})}
+              />
+              <Icon name="checkmark-circle" />
+            </Item>
+          </View>
+          <View style={{marginVertical: 20, height: 20}}>
+            {this._renderBtnSignIn()}
+          </View>
           <View
             style={{
-              width: '90%',
-              height: '90%',
-              alignSelf: 'center',
-              paddingVertical: 40,
-              flex: 1,
+              flexDirection: 'row',
+              marginVertical: 20,
+              justifyContent: 'center',
             }}>
-            <View style={{alignItems: 'center'}}>
-              <Image
-                source={require('../../Assets/Logo2.png')}
-                style={{width: 110, height: 110, borderRadius: 110 / 2}}
-              />
-            </View>
-            <View style={{alignItems: 'center', marginBottom: 40, flex: 1}}>
-              <Text style={{fontWeight: 'bold', fontSize: 20}}>QuyChat</Text>
-              <Text>QUY kita ngobrol bareng!</Text>
-            </View>
-            <View style={{marginVertical: 20}}>
-              <Item regular error>
-                <Input
-                  placeholder="email anda"
-                  onChangeText={email => this.setState({email})}
-                />
-                <Icon name="close-circle" />
-              </Item>
-            </View>
-            <View style={{flex: 1}}>
-              <Item regular success last>
-                <Input
-                  placeholder="nama anda"
-                  onChangeText={name => this.setState({name})}
-                />
-                <Icon name="checkmark-circle" />
-              </Item>
-            </View>
-            <View style={{marginVertical: 20, flex: 1}}>
-              <Item regular success last>
-                <Input
-                  placeholder="telepon anda"
-                  onChangeText={phone => this.setState({phone})}
-                />
-                <Icon name="checkmark-circle" />
-              </Item>
-            </View>
-            <View style={{flex: 1, display: 'flex'}}>
-              <Item regular success last>
-                <Input
-                  placeholder="password anda"
-                  onChangeText={password => this.setState({password})}
-                />
-                <Icon name="checkmark-circle" />
-              </Item>
-            </View>
-            <View style={{marginVertical: 20, height: 20}}>
-              {this._renderBtnSignIn()}
-            </View>
-            <View
-              style={{
-                flexDirection: 'row',
-                marginVertical: 20,
-                justifyContent: 'center',
-              }}>
-              <Text>Sudah punya akun ? </Text>
-              <TouchableOpacity
-                onPress={() => this.props.navigation.navigate('Login')}>
-                <Text style={styles.textBlue}>Masuk Disini.</Text>
-              </TouchableOpacity>
-            </View>
+            <Text>Sudah punya akun ? </Text>
+            <TouchableOpacity
+              onPress={() => this.props.navigation.navigate('Login')}>
+              <Text style={styles.textBlue}>Masuk Disini.</Text>
+            </TouchableOpacity>
           </View>
         </View>
-      </KeyboardAwareScrollView>
+      </View>
     );
   }
 }
