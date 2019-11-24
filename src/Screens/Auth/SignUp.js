@@ -193,7 +193,7 @@ import {
 import {Form, Item, Label, Input, Icon, Button, Toast} from 'native-base';
 import * as firebase from 'firebase';
 import React, {Component} from 'react';
-import {WaveIndicator} from 'react-native-indicators';
+import {SkypeIndicator} from 'react-native-indicators';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 // import Icon from 'react-native-vector-icons/FontAwesome5';
 // import firebaseSDK from '../../Configs/firebaseSDK';
@@ -338,22 +338,41 @@ class SignUp extends Component {
 
   _renderBtnSignIn = () => {
     if (this.state.isLoading === true) {
-      return <WaveIndicator color="#3C82FF" />;
+      return <SkypeIndicator color="#3C82FF" />;
     } else {
       return (
-        <View>
-          <Button
-            block
-            style={{
-              height: 50,
-              backgroundColor: '#3076E0',
-            }}
-            onPress={this.handleSignUp}>
-            <Text style={{color: '#ffffff', fontWeight: 'bold', fontSize: 18}}>
-              DAFTAR
-            </Text>
-          </Button>
-        </View>
+        <>
+          {this.state.email.length > 3 &&
+          this.state.password.length > 3 &&
+          this.state.phone.length > 5 &&
+          this.state.username.length > 2 ? (
+            <Button
+              block
+              style={{
+                height: 50,
+                backgroundColor: '#3076E0',
+              }}
+              onPress={this.handleSignUp}>
+              <Text
+                style={{color: '#ffffff', fontWeight: 'bold', fontSize: 18}}>
+                DAFTAR
+              </Text>
+            </Button>
+          ) : (
+            <Button
+              block
+              disabled
+              style={{
+                height: 50,
+              }}
+              onPress={this.handleSignUp}>
+              <Text
+                style={{color: '#ffffff', fontWeight: 'bold', fontSize: 18}}>
+                DAFTAR
+              </Text>
+            </Button>
+          )}
+        </>
       );
     }
   };
