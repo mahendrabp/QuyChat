@@ -36,6 +36,8 @@ target 'QuyChat' do
 
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
+  pod 'lottie-react-native', :path => '../node_modules/lottie-react-native'
+
   target 'QuyChatTests' do
     inherit! :search_paths
     # Pods for testing

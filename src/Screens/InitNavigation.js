@@ -8,7 +8,7 @@ class InitNavigation extends Component {
         console.log('Logged in!!!');
         this.props.navigation.replace('Mate');
       } else {
-        this.props.navigation.replace('Login');
+        this.props.navigation.replace('Welcome');
       }
     });
   }

@@ -21,9 +21,8 @@ import {
 import * as firebase from 'firebase';
 import React, {Component} from 'react';
 import {BarIndicator, SkypeIndicator} from 'react-native-indicators';
-// import Icon from 'react-native-vector-icons/FontAwesome5';
-// import firebaseSDK from '../../Configs/firebaseSDK';
-// Initialize Firebase
+import LottieView from 'lottie-react-native';
+
 if (!firebase.apps.length) {
   firebase.initializeApp({
     apiKey: 'AIzaSyDFGvksTN7eLHLpG4DfHQhnnzhwoMNc5Ls',
@@ -159,6 +158,11 @@ class Login extends Component {
               style={{width: 110, height: 110, borderRadius: 110 / 2}}
             />
           </View>
+          <LottieView
+            source={require('../../Assets/animations/TwitterHeart.json')}
+            autoPlay
+            loop
+          />
           <View style={{alignItems: 'center', marginBottom: 60}}>
             <Text style={{fontWeight: 'bold', fontSize: 20}}>QuyChat</Text>
             <Text>Selamat Datang Kembali</Text>
@@ -190,7 +194,6 @@ class Login extends Component {
               <Icon name="md-key" />
             </Item>
           </View>
-
           <View style={{marginVertical: 20, height: 20}}>
             {this._renderBtnSignIn()}
           </View>
