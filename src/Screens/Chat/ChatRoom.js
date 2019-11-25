@@ -1,9 +1,10 @@
 import React, {Component, Children} from 'react';
 import {View, StyleSheet, TouchableOpacity, Linking} from 'react-native';
-import {Container, Header, Grid, Col, Row, Text} from 'native-base';
+import {Container, Header, Grid, Col, Row, Text, Icon} from 'native-base';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {GiftedChat} from 'react-native-gifted-chat';
 import * as firebase from 'firebase';
+import Menu, {MenuItem, MenuDivider} from 'react-native-material-menu';
 
 class ChatRoom extends React.Component {
   state = {
@@ -11,7 +12,7 @@ class ChatRoom extends React.Component {
     name: '',
     displayName: '',
     email: '',
-    phone: '',
+    phoneNumber: '',
   };
 
   async componentWillMount() {
@@ -20,6 +21,7 @@ class ChatRoom extends React.Component {
       name: firebase.auth().currentUser.displayName,
       displayName: this.props.navigation.getParam('username'),
     });
+    console.log(firebase.auth().currentUser);
     this.getMessage();
     this.getDatauser();
   }
@@ -29,6 +31,7 @@ class ChatRoom extends React.Component {
       name: firebase.auth().currentUser.displayName,
       email: firebase.auth().currentUser.email,
       avatar: firebase.auth().currentUser.photoURL,
+      // phoneNumber: firebase.auth().currentUser.phoneNumber,
       _id: firebase.auth().currentUser.uid,
     };
   };
@@ -83,28 +86,39 @@ class ChatRoom extends React.Component {
   }
 
   async getDatauser() {
-    const userCollection = 'users/' + this.state.phone;
+    const userCollection = 'users/' + this.state.displayName;
     await firebase
       .database()
       .ref(userCollection)
       .once('value', data => {
         this.setState({
-          phone: data.val().phone,
+          phoneNumber: data.val().phoneNumber,
         });
       });
+    // console.log(this.state.phoneNumber);
   }
 
   callPhone() {
-    let phone = `tel:${this.state.phone}`;
-    Linking.openURL(phone);
+    let phoneNumber = `tel:${this.state.phoneNumber}`;
+    Linking.openURL(phoneNumber);
   }
+
+  setMenuRef = ref => {
+    this._menu = ref;
+  };
+
+  showMenu = () => {
+    this._menu.show();
+  };
+
+  _menu = null;
 
   render() {
     return (
       <Container>
         <Header
-          style={{backgroundColor: '#252f4a'}}
-          androidStatusBarColor="#202a43"
+          style={{backgroundColor: '#1F95CC'}}
+          androidStatusBarColor="#1F95CC"
           noShadow={true}>
           <View style={{flex: 1, paddingVertical: 15, paddingHorizontal: 7}}>
             <Grid>
@@ -157,12 +171,24 @@ class ChatRoom extends React.Component {
                         alignItems: 'flex-end',
                         marginRight: 5,
                       }}>
-                      <TouchableOpacity onPress={() => alert('Down!')}>
-                        <FontAwesome
-                          style={[{color: '#ffff'}]}
-                          size={25}
-                          name={'angle-down'}
-                        />
+                      <TouchableOpacity>
+                        <Menu
+                          ref={this.setMenuRef}
+                          button={
+                            <FontAwesome
+                              style={[{color: '#ffff'}]}
+                              size={25}
+                              name={'angle-down'}
+                              onPress={this.showMenu}
+                            />
+                          }>
+                          <MenuItem onPress={this.hideMenu}>Profil</MenuItem>
+
+                          <MenuDivider />
+                          <MenuItem onPress={this.hideMenu}>
+                            Diamkan Notifikasi
+                          </MenuItem>
+                        </Menu>
                       </TouchableOpacity>
                     </Col>
                   </Row>

@@ -6,6 +6,7 @@ import {
   Alert,
   Image,
   TouchableOpacity,
+  BackHandler,
 } from 'react-native';
 import {
   Form,
@@ -47,6 +48,13 @@ class Login extends Component {
     };
   }
 
+  componentDidMount() {
+    this.backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      this.handleBackPress,
+    );
+  }
+
   onChangeEmail = value => {
     let validationRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     if (validationRegex.test(value) === false) {
@@ -67,6 +75,11 @@ class Login extends Component {
         isEmailValid: true,
       });
     }
+  };
+
+  handleBackPress = () => {
+    BackHandler.exitApp();
+    return true;
   };
 
   handleLogin = async () => {
@@ -158,11 +171,6 @@ class Login extends Component {
               style={{width: 110, height: 110, borderRadius: 110 / 2}}
             />
           </View>
-          <LottieView
-            source={require('../../Assets/animations/TwitterHeart.json')}
-            autoPlay
-            loop
-          />
           <View style={{alignItems: 'center', marginBottom: 60}}>
             <Text style={{fontWeight: 'bold', fontSize: 20}}>QuyChat</Text>
             <Text>Selamat Datang Kembali</Text>

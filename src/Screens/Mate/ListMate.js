@@ -64,8 +64,7 @@ import {
   Thumbnail,
   Body,
 } from 'native-base';
-// import Feather from 'react-native-vector-icons/Feather';
-// import AntDesign from 'react-native-vector-icons/AntDesign';
+
 import * as firebase from 'firebase';
 // import Geolocation from '@react-native-community/geolocation';
 
@@ -116,29 +115,25 @@ class ListMate extends Component {
     return (
       <Container>
         <Header
-          style={{backgroundColor: '#252f4a'}}
+          style={{backgroundColor: '#1F95CC'}}
           androidStatusBarColor="#202a43"
           noShadow={true}>
           <View style={{flex: 1, paddingVertical: 15, paddingHorizontal: 7}}>
             <Grid>
               <Row>
                 <Col>
-                  <Text style={{color: '#ffff', fontSize: 20}}>mates</Text>
+                  <Text
+                    style={{
+                      color: '#ffff',
+                      fontSize: 20,
+                      marginLeft: 15,
+                      fontWeight: 'bold',
+                      fontFamily: 'Roboto',
+                    }}>
+                    mates
+                  </Text>
                 </Col>
-                <Col>
-                  {/* <Row>
-                    <Col style={{ alignItems: 'flex-end' }}>
-                      <TouchableOpacity onPress={() => alert('Add user!')}>
-                        <Feather style={[{ color: '#ffff' }]} size={25} name={'user-plus'} />
-                      </TouchableOpacity>
-                    </Col>
-                    <Col style={{ width: '25%', alignItems: 'flex-end', marginRight: 5 }}>
-                      <TouchableOpacity onPress={() => this.props.navigation.navigate('Login')}>
-                        <AntDesign style={[{ color: '#ffff' }]} size={25} name={'setting'} />
-                      </TouchableOpacity>
-                    </Col>
-                  </Row> */}
-                </Col>
+                {/* <Col></Col> */}
               </Row>
             </Grid>
           </View>
@@ -147,16 +142,19 @@ class ListMate extends Component {
           <View style={styles.contentSearch}>
             <Item
               style={{
-                backgroundColor: '#323b54',
-                borderRadius: 7,
-                paddingHorizontal: 10,
+                backgroundColor: '#40A4D3',
+                borderRadius: 100,
                 borderColor: 'transparent',
               }}>
-              <Icon active name="search" style={{color: '#6f7687'}} />
               <Input
-                placeholder="Search"
-                placeholderTextColor="#6f7687"
-                style={{color: '#6f7687', height: 40}}
+                placeholder="cari mates ...."
+                placeholderTextColor="#FFFFFF"
+                style={{color: '#FFFFFF', height: 40, marginLeft: 15}}
+              />
+              <Icon
+                active
+                name="search"
+                style={{color: '#FFFFFF', marginRight: 15}}
               />
             </Item>
           </View>
@@ -168,7 +166,7 @@ class ListMate extends Component {
                   color: '#252d39',
                   fontWeight: 'bold',
                 }}>
-                My Profile
+                Profil ku
               </Text>
               <List>
                 <ListItem avatar>
@@ -189,7 +187,7 @@ class ListMate extends Component {
                   color: '#252d39',
                   fontWeight: 'bold',
                 }}>
-                Friends
+                Mates ku
               </Text>
               {Object.keys(this.state.mates)
                 .filter(val => this.state.mates[val].email !== this.state.email)
@@ -233,8 +231,8 @@ class ListMate extends Component {
 
 const styles = StyleSheet.create({
   contentSearch: {
-    backgroundColor: '#252f4a',
-    paddingVertical: 7,
+    backgroundColor: '#1F95CC',
+    paddingBottom: 15,
     paddingHorizontal: 15,
   },
   contentChats: {

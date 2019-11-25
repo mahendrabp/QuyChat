@@ -95,7 +95,7 @@
 
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
-import {StyleSheet, View, Text, Image} from 'react-native';
+import {StyleSheet, View, Text, Image, StatusBar} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import AppIntroSlider from 'react-native-app-intro-slider';
 import {Button} from 'native-base';
@@ -139,10 +139,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   textScreen: {
-    fontWeight: '700',
+    fontWeight: 'bold',
     color: '#fff',
     fontSize: 50,
     textAlign: 'center',
+    marginTop: 22,
   },
   subTitle: {
     fontSize: 20,
@@ -162,7 +163,7 @@ const slides = [
     key: '1',
     title: 'Hai, Selamat datang di QuyChat',
     text: '',
-    image: require('../Assets/animations/5591-loading-animation.json'),
+    image: require('../Assets/animations/9517-welcom.json'),
   },
   {
     key: '2',
@@ -220,8 +221,8 @@ export default class App extends Component {
   render() {
     return (
       <View style={styles.pagination}>
-        <Text style={styles.textScreen}>OPO</Text>
-        <Text style={styles.subTitle}>Digital Payment</Text>
+        <StatusBar backgroundColor="#1F95CC" barStyle="light-content" />
+        <Text style={styles.textScreen}>QuyChat</Text>
         <AppIntroSlider
           style={{backgroundColor: '#1F95CC'}}
           slides={slides}

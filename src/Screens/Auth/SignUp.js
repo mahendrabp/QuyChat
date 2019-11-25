@@ -62,56 +62,56 @@
 //     }
 //   };
 
-//   handleSignUp = async () => {
-//     //init state when click
-//     this.setState({
-//       isError: '',
-//       isLoading: true,
-//     });
+// handleSignUp = async () => {
+//   //init state when click
+//   this.setState({
+//     isError: '',
+//     isLoading: true,
+//   });
 
-//     const {email, password} = this.state;
-//     await firebase
-//       .auth()
-//       .createUserWithEmailAndPassword(email, password)
-//       .then(async () => {
-//         const user = firebase.auth().currentUser;
-//         const databaseUser = firebase.database().ref(`/users/${user.uid}`);
-//         return databaseUser
-//           .set({
-//             email: this.state.email,
-//             name: this.state.name,
-//             phone: this.state.phone,
-//             avatar: `https://ui-avatars.com/api/?rounded=true&name=${this.state.name}`,
-//           })
-//           .then(() => databaseUser.once('value'))
-//           .then(snapshot => ({auth: user, snapshot}));
-//       })
-//       .then(({auth, snapshot}) => {
-//         const data = snapshot.val();
-//         // return AsyncStorage.setItem(
-//         //   'user:data',
-//         //   JSON.stringify({uid: auth.uid, ...data}),
-//         // );
-//       })
-//       .then(() => {
-//         Toast.show({
-//           text: 'Berhasil Register',
-//           position: 'bottom',
-//           duration: 2000,
-//           type: 'success',
-//         });
-//         this.props.navigation.navigate('Login');
-//       })
-//       .catch(err => {
-//         Toast.show({
-//           text: err.message,
-//           buttonText: 'Ok',
-//           type: 'warning',
-//           duration: 2000,
-//         });
-//         return false;
+//   const {email, password} = this.state;
+//   await firebase
+//     .auth()
+//     .createUserWithEmailAndPassword(email, password)
+//     .then(async () => {
+//       const user = firebase.auth().currentUser;
+//       const databaseUser = firebase.database().ref(`/users/${user.uid}`);
+//       return databaseUser
+//         .set({
+//           email: this.state.email,
+//           name: this.state.name,
+//           phone: this.state.phone,
+//           avatar: `https://ui-avatars.com/api/?rounded=true&name=${this.state.name}`,
+//         })
+//         .then(() => databaseUser.once('value'))
+//         .then(snapshot => ({auth: user, snapshot}));
+//     })
+//     .then(({auth, snapshot}) => {
+//       const data = snapshot.val();
+//       // return AsyncStorage.setItem(
+//       //   'user:data',
+//       //   JSON.stringify({uid: auth.uid, ...data}),
+//       // );
+//     })
+//     .then(() => {
+//       Toast.show({
+//         text: 'Berhasil Register',
+//         position: 'bottom',
+//         duration: 2000,
+//         type: 'success',
 //       });
-//   };
+//       this.props.navigation.navigate('Login');
+//     })
+//     .catch(err => {
+//       Toast.show({
+//         text: err.message,
+//         buttonText: 'Ok',
+//         type: 'warning',
+//         duration: 2000,
+//       });
+//       return false;
+//     });
+// };
 
 //   onChangeTextEmail = email => this.setState({email});
 //   onChangeTextPassword = password => this.setState({password});
@@ -216,7 +216,7 @@ class SignUp extends Component {
     this.state = {
       email: '',
       password: '',
-      phone: '',
+      phoneNumber: '',
       name: '',
       username: '',
       isError: '',
@@ -249,54 +249,77 @@ class SignUp extends Component {
     }
   };
 
-  handleSignUp = async () => {
+  async handleSignUp() {
     //init state when click
     this.setState({
       isError: '',
       isLoading: true,
     });
 
-    const {email, password, name, username, phone} = this.state;
+    const {email, password, name, username, phoneNumber} = this.state;
     //init this collection for firebase
-    const userCollection = '/users/' + this.state.phone;
+    const userCollection = '/users/' + this.state.username;
 
-    //check if phone already in use or not
+    //check if username already in use or not
     firebase
       .database()
       .ref(userCollection)
       .on('value', snapshot => {
+        console.log(snapshot.val());
+        this.setState({
+          email: '',
+          isError: '',
+          isLoading: false,
+        });
         if (snapshot.val()) {
-          Toast.show({
-            text: 'no telepon telah di gunakan',
+          return Toast.show({
+            text: 'username telah di gunakan',
             buttonText: 'Ok',
             type: 'danger',
             duration: 2000,
           });
-          this.setState({
-            isError: '',
-            isLoading: false,
-          });
-          return false;
         }
       });
+
+    // firebase
+    //   .database()
+    //   .ref(userCollection)
+    //   .on('value', snapshot => {
+    //     if (snapshot.val().phoneNumber) {
+    //       Toast.show({
+    //         text: 'telepon telah di gunakan',
+    //         buttonText: 'Ok',
+    //         type: 'danger',
+    //         duration: 2000,
+    //       });
+    //       this.setState({
+    //         isError: '',
+    //         isLoading: false,
+    //       });
+    //       return false;
+    //     }
+    //   });
 
     await firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
       .then(result => {
+        console.log(result);
         result.user.updateProfile({
           displayName: this.state.username,
         });
         const avatar =
-          'https://ui-avatars.com/api/?size=256&rounded=true&name=' +
-          this.state.username.replace(' ', '+');
+          `https://ui-avatars.com/api/?size=256&rounded=true&background=${(
+            ((1 << 24) * Math.random()) |
+            0
+          ).toString(16)}&name=` + this.state.username.replace(' ', '+');
         firebase
           .database()
           .ref(userCollection)
           .set({
             username,
             email,
-            phone,
+            phoneNumber,
             avatar: avatar,
           })
           .then(data => {
@@ -315,7 +338,7 @@ class SignUp extends Component {
         this.setState({
           email: '',
           username: '',
-          phone: '',
+          phoneNumber: '',
           password: '',
         });
         this.props.navigation.navigate('Login');
@@ -334,7 +357,7 @@ class SignUp extends Component {
     this.setState({
       isLoading: false,
     });
-  };
+  }
 
   _renderBtnSignIn = () => {
     if (this.state.isLoading === true) {
@@ -344,7 +367,7 @@ class SignUp extends Component {
         <>
           {this.state.email.length > 3 &&
           this.state.password.length > 3 &&
-          this.state.phone.length > 5 &&
+          this.state.phoneNumber.length > 5 &&
           this.state.username.length > 2 ? (
             <Button
               block
@@ -352,7 +375,7 @@ class SignUp extends Component {
                 height: 50,
                 backgroundColor: '#3076E0',
               }}
-              onPress={this.handleSignUp}>
+              onPress={() => this.handleSignUp()}>
               <Text
                 style={{color: '#ffffff', fontWeight: 'bold', fontSize: 18}}>
                 DAFTAR
@@ -365,7 +388,7 @@ class SignUp extends Component {
               style={{
                 height: 50,
               }}
-              onPress={this.handleSignUp}>
+              onPress={() => this.handleSignUp()}>
               <Text
                 style={{color: '#ffffff', fontWeight: 'bold', fontSize: 18}}>
                 DAFTAR
@@ -444,15 +467,17 @@ class SignUp extends Component {
             <View style={{marginVertical: 20}}>
               <Item
                 regular
-                success={this.state.phone.length > 7 ? true : false}>
+                success={this.state.phoneNumber.length > 7 ? true : false}>
                 <Input
                   placeholder="telepon anda"
-                  onChangeText={phone => this.setState({phone})}
+                  onChangeText={phoneNumber => this.setState({phoneNumber})}
                   keyboardType="numeric"
                 />
                 <Icon
                   name={
-                    this.state.phone.length > 7 ? 'checkmark-circle' : 'md-call'
+                    this.state.phoneNumber.length > 7
+                      ? 'checkmark-circle'
+                      : 'md-call'
                   }
                 />
               </Item>
@@ -535,7 +560,7 @@ export default SignUp;
 //           .set({
 //             email: this.state.email,
 //             name: this.state.name,
-//             phone: this.state.phone,
+//             phoneNumber: this.state.phoneNumber,
 //             avatar: `https://ui-avatars.com/api/?rounded=true&name=${this.state.name}`,
 //           })
 //           .then(() => databaseUser.once('value'))

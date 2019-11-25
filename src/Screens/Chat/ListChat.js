@@ -1,11 +1,5 @@
 import React, {Component} from 'react';
-import {
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  FlatList,
-  SafeAreaView,
-} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import {
   Container,
   Header,
@@ -23,34 +17,32 @@ import * as firebase from 'firebase';
 import Menu, {MenuItem, MenuDivider} from 'react-native-material-menu';
 import {Avatar, Divider, TouchableRipple} from 'react-native-paper';
 
-class ListChat extends React.Component {
+class ListChat extends Component {
   constructor(props) {
     super(props);
     this.state = {
       username: '',
       email: '',
       status: '',
-      phone: '',
+      phoneNumber: '',
       avatar: '',
       users: [],
     };
   }
 
   _menu = null;
-
   setMenuRef = ref => {
     this._menu = ref;
   };
-
   hideMenu = () => {
     this._menu.hide();
   };
-
   showMenu = () => {
     this._menu.show();
   };
 
   async getData() {
+    console.log(firebase.auth().currentUser);
     this.setState({
       username: firebase.auth().currentUser.displayName,
       email: firebase.auth().currentUser.email,
@@ -60,7 +52,7 @@ class ListChat extends React.Component {
       .ref('users/')
       .on('value', snapshot => {
         const set = snapshot.val();
-        // console.log(set);
+        console.log(set);
         this.setState({
           users: set,
         });
@@ -98,7 +90,7 @@ class ListChat extends React.Component {
                   button={
                     <Icon
                       active
-                      name="menu"
+                      name="md-more"
                       style={{color: '#FFFFFF', marginRight: 15}}
                       onPress={this.showMenu}
                     />
@@ -121,7 +113,7 @@ class ListChat extends React.Component {
                 borderColor: 'transparent',
               }}>
               <Input
-                placeholder="cari percakapan"
+                placeholder="cari percakapan..."
                 placeholderTextColor="#FFFFFF"
                 style={{color: '#FFFFFF', height: 40, marginLeft: 15}}
               />
@@ -134,13 +126,17 @@ class ListChat extends React.Component {
           </View>
           <View style={styles.contentChats}>
             {Object.keys(this.state.users)
-              .filter(val => this.state.users[val].email !== this.state.email)
+              .filter(
+                val =>
+                  this.state.users[val].email.toLowerCase() !==
+                  this.state.email,
+              )
               .map(key => {
-                const {style, value, ...otherProps} = this.props;
                 return (
                   <>
                     <View>
                       <TouchableRipple
+                        key={this.state.users[key].username}
                         onPress={() =>
                           this.props.navigation.navigate('ChatRoom', {
                             username: this.state.users[key].username,
@@ -150,13 +146,18 @@ class ListChat extends React.Component {
                         <Grid
                           style={{
                             marginBottom: 10,
-
                             marginTop: 10,
                           }}>
                           <Col size={1}>
-                            <View>
+                            <View
+                              style={{
+                                backgroundColor: '#bcbdc6',
+                                marginRight: 18,
+                                borderRadius: 20,
+                                borderColor: '#ffffff',
+                              }}>
                               <Avatar.Image
-                                size={50}
+                                size={48}
                                 source={{
                                   uri: `${this.state.users[key].avatar}`,
                                 }}
@@ -205,6 +206,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 5,
     paddingVertical: 5,
+    // backgroundColor: '#242A31',
   },
   touchable: {paddingHorizontal: 10, paddingVertical: 2},
   item: {flex: 1, flexDirection: 'row', height: 70, alignItems: 'center'},
@@ -218,10 +220,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingBottom: 6,
   },
-  name: {fontWeight: 'bold', fontSize: 18, color: 'black'},
+  name: {fontWeight: '700', fontSize: 18, color: '#4C5055'},
   time: {fontSize: 14, color: 'grey'},
   msg: {fontWeight: '400', fontSize: 14, color: 'grey'},
-  divider: {marginLeft: 72},
+  divider: {marginLeft: 65, backgroundColor: '#4C5055', height: 1},
 });
 
 export default ListChat;
