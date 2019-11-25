@@ -105,7 +105,7 @@
 //       .catch(err => {
 //         Toast.show({
 //           text: err.message,
-//           buttonText: 'Okay',
+//           buttonText: 'Ok',
 //           type: 'warning',
 //           duration: 2000,
 //         });
@@ -268,8 +268,8 @@ class SignUp extends Component {
         if (snapshot.val()) {
           Toast.show({
             text: 'no telepon telah di gunakan',
-            buttonText: 'Okay',
-            type: 'warning',
+            buttonText: 'Ok',
+            type: 'danger',
             duration: 2000,
           });
           this.setState({
@@ -308,7 +308,7 @@ class SignUp extends Component {
         // console.log(this.state.latitude);
         Toast.show({
           text: 'Akun QuyChat berhasil dibuat',
-          buttonText: 'Okay',
+          buttonText: 'Ok',
           type: 'success',
           duration: 2000,
         });
@@ -323,8 +323,8 @@ class SignUp extends Component {
       .catch(error => {
         Toast.show({
           text: error.message,
-          buttonText: 'Okay',
-          type: 'warning',
+          buttonText: 'Ok',
+          type: 'danger',
           duration: 3000,
         });
         this.setState({
@@ -382,83 +382,118 @@ class SignUp extends Component {
 
   render() {
     return (
-      <View
-        style={{
-          flex: 1,
-          display: 'flex',
-          justifyContent: 'center',
-        }}>
+      <KeyboardAwareScrollView>
         <View
           style={{
-            width: '90%',
-            height: '90%',
-            alignSelf: 'center',
-            paddingVertical: 40,
             flex: 1,
+            display: 'flex',
+            justifyContent: 'center',
           }}>
-          <View style={{alignItems: 'center'}}>
-            <Image
-              source={require('../../Assets/Logo2.png')}
-              style={{width: 110, height: 110, borderRadius: 110 / 2}}
-            />
-          </View>
-          <View style={{alignItems: 'center', marginBottom: 40, flex: 1}}>
-            <Text style={{fontWeight: 'bold', fontSize: 20}}>QuyChat</Text>
-            <Text>QUY kita ngobrol bareng!</Text>
-          </View>
-          <View style={{marginVertical: 20}}>
-            <Item regular error>
-              <Input
-                placeholder="email anda"
-                onChangeText={email => this.setState({email})}
-              />
-              <Icon name="close-circle" />
-            </Item>
-          </View>
-          <View>
-            <Item regular success last>
-              <Input
-                placeholder="nama anda"
-                onChangeText={username => this.setState({username})}
-              />
-              <Icon name="checkmark-circle" />
-            </Item>
-          </View>
-          <View style={{marginVertical: 20}}>
-            <Item regular success last>
-              <Input
-                placeholder="telepon anda"
-                onChangeText={phone => this.setState({phone})}
-              />
-              <Icon name="checkmark-circle" />
-            </Item>
-          </View>
-          <View style={{display: 'flex'}}>
-            <Item regular success last>
-              <Input
-                placeholder="password anda"
-                onChangeText={password => this.setState({password})}
-              />
-              <Icon name="checkmark-circle" />
-            </Item>
-          </View>
-          <View style={{marginVertical: 20, height: 20}}>
-            {this._renderBtnSignIn()}
-          </View>
           <View
             style={{
-              flexDirection: 'row',
-              marginVertical: 20,
-              justifyContent: 'center',
+              width: '90%',
+              height: '90%',
+              alignSelf: 'center',
+              paddingVertical: 40,
+              flex: 1,
             }}>
-            <Text>Sudah punya akun ? </Text>
-            <TouchableOpacity
-              onPress={() => this.props.navigation.navigate('Login')}>
-              <Text style={styles.textBlue}>Masuk Disini.</Text>
-            </TouchableOpacity>
+            <View style={{alignItems: 'center'}}>
+              <Image
+                source={require('../../Assets/Logo2.png')}
+                style={{width: 110, height: 110, borderRadius: 110 / 2}}
+              />
+            </View>
+            <View style={{alignItems: 'center', marginBottom: 40, flex: 1}}>
+              <Text style={{fontWeight: 'bold', fontSize: 20}}>QuyChat</Text>
+              <Text>QUY kita ngobrol bareng!</Text>
+            </View>
+
+            <View style={{marginVertical: 20}}>
+              <Item
+                regular
+                success={this.state.email.length > 3 ? true : false}>
+                <Input
+                  placeholder="email anda"
+                  onChangeText={email => this.setState({email})}
+                />
+                <Icon
+                  name={
+                    this.state.email.length > 3 ? 'checkmark-circle' : 'md-mail'
+                  }
+                />
+              </Item>
+            </View>
+            <View>
+              <Item
+                regular
+                success={this.state.username.length > 0 ? true : false}
+                last>
+                <Input
+                  placeholder="username anda"
+                  onChangeText={username => this.setState({username})}
+                />
+                <Icon
+                  name={
+                    this.state.username.length > 0
+                      ? 'checkmark-circle'
+                      : 'md-contact'
+                  }
+                />
+              </Item>
+            </View>
+            <View style={{marginVertical: 20}}>
+              <Item
+                regular
+                success={this.state.phone.length > 7 ? true : false}>
+                <Input
+                  placeholder="telepon anda"
+                  onChangeText={phone => this.setState({phone})}
+                  keyboardType="numeric"
+                />
+                <Icon
+                  name={
+                    this.state.phone.length > 7 ? 'checkmark-circle' : 'md-call'
+                  }
+                />
+              </Item>
+            </View>
+            <View style={{display: 'flex'}}>
+              <Item
+                regular
+                success={this.state.password.length > 3 ? true : false}
+                last>
+                <Input
+                  placeholder="password anda"
+                  onChangeText={password => this.setState({password})}
+                />
+                <Icon
+                  name={
+                    this.state.password.length > 3
+                      ? 'checkmark-circle'
+                      : 'md-key'
+                  }
+                />
+              </Item>
+            </View>
+            <View style={{marginVertical: 20, height: 20}}>
+              {this._renderBtnSignIn()}
+            </View>
+
+            <View
+              style={{
+                flexDirection: 'row',
+                marginVertical: 20,
+                justifyContent: 'center',
+              }}>
+              <Text>Sudah punya akun ? </Text>
+              <TouchableOpacity
+                onPress={() => this.props.navigation.navigate('Login')}>
+                <Text style={styles.textBlue}>Masuk Disini.</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
-      </View>
+      </KeyboardAwareScrollView>
     );
   }
 }
@@ -525,7 +560,7 @@ export default SignUp;
 //       .catch(err => {
 //         Toast.show({
 //           text: err.message,
-//           buttonText: 'Okay',
+//           buttonText: 'Ok',
 //           type: 'warning',
 //           duration: 2000,
 //         });

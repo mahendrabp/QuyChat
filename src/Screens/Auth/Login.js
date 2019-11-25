@@ -7,7 +7,17 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
-import {Form, Item, Label, Input, Icon, Button} from 'native-base';
+import {
+  Form,
+  Item,
+  Label,
+  Input,
+  Icon,
+  Button,
+  Header,
+  Container,
+  Content,
+} from 'native-base';
 import * as firebase from 'firebase';
 import React, {Component} from 'react';
 import {BarIndicator, SkypeIndicator} from 'react-native-indicators';
@@ -154,23 +164,30 @@ class Login extends Component {
             <Text>Selamat Datang Kembali</Text>
           </View>
           <View style={{marginVertical: 20}}>
-            <Item regular error>
+            <Item
+              regular
+              style={{borderWidth: 100}}
+              success={!this.state.isEmailValid ? false : true}
+              error={!this.state.isEmailValid ? true : false}>
               <Input
                 placeholder="email anda"
-                onChangeText={email => this.setState({email})}
+                onChangeText={email => this.onChangeEmail(email)}
                 onSubmitEditing={() => this.handleLogin}
               />
-              <Icon name="close-circle" />
+              <Icon
+                name={!this.state.isEmailValid ? 'md-mail' : 'checkmark-circle'}
+              />
             </Item>
           </View>
           <View>
             <Item regular success last>
               <Input
+                secureTextEntry={true}
                 placeholder="password anda"
                 onChangeText={password => this.setState({password})}
                 onSubmitEditing={() => this.handleLogin}
               />
-              <Icon name="checkmark-circle" />
+              <Icon name="md-key" />
             </Item>
           </View>
 
