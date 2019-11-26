@@ -29,7 +29,7 @@ class More extends Component {
   }
 
   async getDataProfile() {
-    const userCollection = 'users/' + firebase.auth().currentUser.displayName;
+    const userCollection = 'users/' + firebase.auth().currentUser.uid;
     await firebase
       .database()
       .ref(userCollection)
@@ -52,11 +52,11 @@ class More extends Component {
     return (
       <Container>
         <Header
-          style={{backgroundColor: '#252f4a'}}
-          androidStatusBarColor="#202a43"
+          style={{backgroundColor: '#1F95CC'}}
+          androidStatusBarColor="#1F95CC"
           noShadow={true}>
           <View style={{flex: 1, paddingVertical: 15, paddingHorizontal: 7}}>
-            <Text style={{color: '#ffff', fontSize: 20}}>More</Text>
+            <Text style={{color: '#ffff', fontSize: 20}}>Profil</Text>
           </View>
         </Header>
         <Content>
@@ -80,7 +80,7 @@ class More extends Component {
             </Grid>
           </View>
           <View style={styles.contentSetting}>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               onPress={() => this.props.navigation.navigate('EditProfile')}>
               <Grid>
                 <Row style={{paddingVertical: 10}}>
@@ -96,7 +96,7 @@ class More extends Component {
                   </Col>
                 </Row>
               </Grid>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             {/* <TouchableOpacity onPress={() => this.props.navigation.navigate('Maps')}>
               <Grid>
                 <Row style={{ paddingVertical: 10 }}>

@@ -98,7 +98,7 @@ class ListMate extends Component {
   }
 
   async getDataProfile() {
-    const userCollection = '/users/' + firebase.auth().currentUser.displayName;
+    const userCollection = '/users/' + firebase.auth().currentUser.uid;
     await firebase
       .database()
       .ref(userCollection)
@@ -116,7 +116,7 @@ class ListMate extends Component {
       <Container>
         <Header
           style={{backgroundColor: '#1F95CC'}}
-          androidStatusBarColor="#202a43"
+          androidStatusBarColor="#1F95CC"
           noShadow={true}>
           <View style={{flex: 1, paddingVertical: 15, paddingHorizontal: 7}}>
             <Grid>
@@ -130,7 +130,7 @@ class ListMate extends Component {
                       fontWeight: 'bold',
                       fontFamily: 'Roboto',
                     }}>
-                    mates
+                    Mates
                   </Text>
                 </Col>
                 {/* <Col></Col> */}

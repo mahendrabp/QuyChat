@@ -258,45 +258,27 @@ class SignUp extends Component {
 
     const {email, password, name, username, phoneNumber} = this.state;
     //init this collection for firebase
-    const userCollection = '/users/' + this.state.username;
+    // const user = firebase.auth().currentUser;
+    // const userCollection = `/users/${user.uid}`;
 
     //check if username already in use or not
-    firebase
-      .database()
-      .ref(userCollection)
-      .on('value', snapshot => {
-        console.log(snapshot.val());
-        this.setState({
-          email: '',
-          isError: '',
-          isLoading: false,
-        });
-        if (snapshot.val()) {
-          return Toast.show({
-            text: 'username telah di gunakan',
-            buttonText: 'Ok',
-            type: 'danger',
-            duration: 2000,
-          });
-        }
-      });
-
     // firebase
     //   .database()
     //   .ref(userCollection)
     //   .on('value', snapshot => {
-    //     if (snapshot.val().phoneNumber) {
-    //       Toast.show({
-    //         text: 'telepon telah di gunakan',
+    //     console.log(snapshot.val());
+    //     this.setState({
+    //       email: '',
+    //       isError: '',
+    //       isLoading: false,
+    //     });
+    //     if (snapshot.val()) {
+    //       return Toast.show({
+    //         text: 'username telah di gunakan',
     //         buttonText: 'Ok',
     //         type: 'danger',
     //         duration: 2000,
     //       });
-    //       this.setState({
-    //         isError: '',
-    //         isLoading: false,
-    //       });
-    //       return false;
     //     }
     //   });
 
@@ -304,6 +286,8 @@ class SignUp extends Component {
       .auth()
       .createUserWithEmailAndPassword(email, password)
       .then(result => {
+        const user = firebase.auth().currentUser;
+        const userCollection = `/users/${user.uid}`;
         console.log(result);
         result.user.updateProfile({
           displayName: this.state.username,

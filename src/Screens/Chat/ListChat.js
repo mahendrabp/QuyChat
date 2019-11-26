@@ -27,6 +27,7 @@ class ListChat extends Component {
       phoneNumber: '',
       avatar: '',
       users: [],
+      text: '',
     };
   }
 
@@ -59,10 +60,34 @@ class ListChat extends Component {
       });
   }
 
+  async getMessage(key) {
+    await firebase
+      .database()
+      .ref(
+        'Messages/' +
+          firebase.auth().currentUser.displayName +
+          '/' +
+          this.state.users[key].username +
+          '/',
+      )
+      .limitToLast(1)
+      .on('value', snapshot => {
+        let text = '';
+        snapshot.forEach(child => {
+          text = child.val().text;
+          // console.log(text);
+        });
+        this.setState({
+          text: text,
+        });
+      });
+  }
+
   componentDidMount() {
     this.getData();
     console.log(this.state.users);
   }
+
   render() {
     return (
       <Container>
@@ -96,7 +121,6 @@ class ListChat extends Component {
                     />
                   }>
                   <MenuItem onPress={this.hideMenu}>Grup Baru</MenuItem>
-
                   <MenuDivider />
                   <MenuItem onPress={this.hideMenu}>Pengaturan</MenuItem>
                 </Menu>
@@ -136,7 +160,7 @@ class ListChat extends Component {
                   <>
                     <View>
                       <TouchableRipple
-                        key={this.state.users[key].username}
+                        key={this.state.users[key].uid}
                         onPress={() =>
                           this.props.navigation.navigate('ChatRoom', {
                             username: this.state.users[key].username,
@@ -168,6 +192,11 @@ class ListChat extends Component {
                             <Text style={styles.name}>
                               {this.state.users[key].username}
                             </Text>
+                            <Text style={{fontSize: 16, color: '#bcbdc6'}}>
+                              {this.state.users[key].email}
+                            </Text>
+                            {/* {this.getMessage(key)} */}
+                            {/* <Text>{this.state.text}</Text> */}
                           </Col>
                           <Col size={1}>
                             <Row style={{alignItems: 'center'}}>
@@ -223,7 +252,7 @@ const styles = StyleSheet.create({
   name: {fontWeight: '700', fontSize: 18, color: '#4C5055'},
   time: {fontSize: 14, color: 'grey'},
   msg: {fontWeight: '400', fontSize: 14, color: 'grey'},
-  divider: {marginLeft: 65, backgroundColor: '#4C5055', height: 1},
+  divider: {marginLeft: 65, backgroundColor: '#4C5055'},
 });
 
 export default ListChat;

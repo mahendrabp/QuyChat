@@ -20,7 +20,7 @@ const TabNavigation = createMaterialBottomTabNavigator(
     ListChat: {
       screen: ListChat,
       navigationOptions: {
-        tabBarLabel: 'Chats',
+        tabBarLabel: 'Obrolan',
         tabBarIcon: ({tintColor}) => (
           <View>
             <MaterialCommunityIcons
@@ -38,10 +38,10 @@ const TabNavigation = createMaterialBottomTabNavigator(
         tabBarLabel: 'Mate',
         tabBarIcon: ({tintColor}) => (
           <View>
-            <MaterialIcons
+            <MaterialCommunityIcons
               style={[{color: tintColor}]}
               size={25}
-              name={'person'}
+              name={'account-group'}
             />
           </View>
         ),
@@ -50,13 +50,13 @@ const TabNavigation = createMaterialBottomTabNavigator(
     Logout: {
       screen: Logout,
       navigationOptions: {
-        tabBarLabel: 'Mate',
+        tabBarLabel: 'Profil',
         tabBarIcon: ({tintColor}) => (
           <View>
-            <MaterialIcons
+            <MaterialCommunityIcons
               style={[{color: tintColor}]}
               size={25}
-              name={'person'}
+              name={'face-profile'}
             />
           </View>
         ),
@@ -64,7 +64,7 @@ const TabNavigation = createMaterialBottomTabNavigator(
     },
   },
   {
-    activeColor: '#202a43',
+    activeColor: '#3C82FF',
     inactiveColor: '#979797',
     barStyle: {backgroundColor: '#fff'},
   },
