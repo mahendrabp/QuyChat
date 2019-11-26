@@ -13,7 +13,7 @@ import {
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import * as firebase from 'firebase';
 
-class More extends Component {
+class Logout extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -146,4 +146,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default More;
+export default Logout;

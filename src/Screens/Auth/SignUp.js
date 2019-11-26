@@ -197,6 +197,9 @@ import {SkypeIndicator} from 'react-native-indicators';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 // import Icon from 'react-native-vector-icons/FontAwesome5';
 // import firebaseSDK from '../../Configs/firebaseSDK';
+import Geolocation from '@react-native-community/geolocation';
+
+Geolocation.getCurrentPosition(info => console.log(info));
 // Initialize Firebase
 if (!firebase.apps.length) {
   firebase.initializeApp({

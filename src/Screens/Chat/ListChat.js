@@ -12,7 +12,6 @@ import {
   Input,
   Item,
 } from 'native-base';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import * as firebase from 'firebase';
 import Menu, {MenuItem, MenuDivider} from 'react-native-material-menu';
 import {Avatar, Divider, TouchableRipple} from 'react-native-paper';
@@ -35,9 +34,11 @@ class ListChat extends Component {
   setMenuRef = ref => {
     this._menu = ref;
   };
+
   hideMenu = () => {
     this._menu.hide();
   };
+
   showMenu = () => {
     this._menu.show();
   };
@@ -193,7 +194,7 @@ class ListChat extends Component {
                               {this.state.users[key].username}
                             </Text>
                             <Text style={{fontSize: 16, color: '#bcbdc6'}}>
-                              {this.state.users[key].email}
+                              {this.state.users[key].email.toLowerCase()}
                             </Text>
                             {/* {this.getMessage(key)} */}
                             {/* <Text>{this.state.text}</Text> */}
@@ -206,7 +207,7 @@ class ListChat extends Component {
                                     fontSize: 15,
                                     color: '#bcbdc6',
                                   }}>
-                                  waktu
+                                  online
                                 </Text>
                               </Col>
                             </Row>

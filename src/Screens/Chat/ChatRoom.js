@@ -1,4 +1,4 @@
-import React, {Component, Children} from 'react';
+import React, {Component} from 'react';
 import {
   View,
   StyleSheet,
@@ -14,7 +14,7 @@ import Menu, {MenuItem, MenuDivider} from 'react-native-material-menu';
 
 const Width = Dimensions.get('window').width;
 
-class ChatRoom extends React.Component {
+class ChatRoom extends Component {
   state = {
     Messages: [],
     name: '',
@@ -212,7 +212,7 @@ class ChatRoom extends React.Component {
                     <Col style={{alignItems: 'flex-end'}}>
                       <TouchableOpacity
                         onPress={() =>
-                          this.props.navigation.navigate('Maps', {
+                          this.props.navigation.navigate('Location', {
                             username: this.state.displayName,
                             // latitude: this.state.latitude,
                             // longitude: this.state.longitude,

@@ -14,6 +14,7 @@ import ListChat from './Screens/Chat/ListChat';
 import ListMate from './Screens/Mate/ListMate';
 import InitNavigation from './Screens/InitNavigation';
 import Logout from './Screens/Auth/Logout';
+import Location from './Screens/Mate//Location';
 
 const TabNavigation = createMaterialBottomTabNavigator(
   {
@@ -86,6 +87,12 @@ const MainNavigator = createStackNavigator(
     },
     ChatRoom: {
       screen: ChatRoom,
+      navigationOptions: {
+        header: null,
+      },
+    },
+    Location: {
+      screen: Location,
       navigationOptions: {
         header: null,
       },
