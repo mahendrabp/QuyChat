@@ -19,8 +19,8 @@ import {
 } from 'native-base';
 
 import * as firebase from 'firebase';
+import MapView, {Marker} from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
-import MapView from 'react-native-maps';
 
 class Location extends Component {
   constructor(props) {
@@ -31,31 +31,94 @@ class Location extends Component {
       avatar: '',
       status: '',
       mates: [],
+      longitude: '',
+      latitude: '',
+      initLocation: '',
+      currentPostion: '',
     };
   }
 
+  componentDidMount() {
+    this.getLocation();
+  }
+
+  componentWillUnmount() {
+    this.watchID != null && Geolocation.clearWatch(this.watchID);
+  }
+
+  watchID: ?number = null;
+
+  getLocation = async () => {
+    Geolocation.getCurrentPosition(
+      position => {
+        console.log(position);
+        this.setState({
+          initLocation: position,
+        });
+      },
+      error => {
+        console.log(error);
+      },
+      {enableHighAccuracy: true},
+    );
+
+    this.watchId = Geolocation.watchPosition(
+      position => {
+        this.setState({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+          currentPostion: position,
+        });
+      },
+      error => {
+        console.log(error);
+      },
+      {enableHighAccuracy: true},
+    );
+  };
+
   render() {
+    let mateMap;
     return (
-      //   <Container>
-      //     <Header
-      //       style={{backgroundColor: '#1F95CC'}}
-      //       androidStatusBarColor="#1F95CC"
-      //       noShadow={true}></Header>
-      //     <Content>
-      <View style={styles.container}>
+      <Container>
+        <Header
+          style={{backgroundColor: '#1F95CC'}}
+          androidStatusBarColor="#1F95CC"
+          noShadow={true}></Header>
+
         <MapView
           // remove if not using Google Maps
-          style={styles.map}
-          region={{
-            latitude: 37.78825,
-            longitude: -122.4324,
-            latitudeDelta: 0.015,
-            longitudeDelta: 0.0121,
+
+          style={{
+            position: 'absolute',
+            width: '100%',
+            height: '90%',
           }}
-        />
-      </View>
-      //     </Content>
-      //   </Container>
+          region={{
+            latitude: -6.619849,
+            longitude: 106.818552,
+            latitudeDelta: 0.01,
+            longitudeDelta: 0.01,
+          }}>
+          <Marker
+            coordinate={{
+              latitude: -6.619849,
+              longitude: 106.818552,
+              latitudeDelta: 0.01,
+              longitudeDelta: 0.01,
+            }}
+            title={'test title'}
+            description={'test desc'}
+          />
+        </MapView>
+        <View style={{marginLeft: 20, backgroundColor: 'red'}}>
+          <TouchableOpacity
+            style={styles.btnBack}
+            onPress={() => this.props.navigation.goBack()}>
+            <Icon type="Ionicons" name="md-close" style={{color: '#fff'}} />
+          </TouchableOpacity>
+        </View>
+      </Container>
     );
   }
 }
@@ -70,6 +133,13 @@ const styles = StyleSheet.create({
   },
   map: {
     ...StyleSheet.absoluteFillObject,
+  },
+  btnBack: {
+    position: 'absolute',
+    backgroundColor: '#1F95CC',
+    paddingVertical: 5,
+    paddingHorizontal: 5,
+    borderRadius: 30,
   },
 });
 

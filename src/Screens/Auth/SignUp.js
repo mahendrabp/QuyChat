@@ -222,6 +222,10 @@ class SignUp extends Component {
       phoneNumber: '',
       name: '',
       username: '',
+      longitude: '',
+      latitude: '',
+      initLocation: '',
+      currentPostion: '',
       isError: '',
       avatar: '',
       isLoading: false,
@@ -229,6 +233,41 @@ class SignUp extends Component {
       isButtonDisabled: 'true',
     };
   }
+
+  componentDidMount() {
+    this.getLocation();
+  }
+  getLocation = async () => {
+    Geolocation.getCurrentPosition(
+      position => {
+        // console.log(JSON.stringify(position));
+        // const initLocation = JSON.stringify(position);
+        this.setState({
+          initLocation: position,
+        });
+      },
+      error => {
+        console.log(error);
+        Alert.alert(error.message);
+      },
+      {enableHighAccuracy: true, distanceFilter: 1},
+    );
+
+    this.watchId = Geolocation.watchPosition(
+      position => {
+        console.log(position);
+        this.setState({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+          currentPostion: position,
+        });
+      },
+      error => {
+        console.log(error);
+      },
+      {enableHighAccuracy: true},
+    );
+  };
 
   onChangeEmail = value => {
     let validationRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
@@ -307,6 +346,7 @@ class SignUp extends Component {
             username,
             email,
             phoneNumber,
+
             avatar: avatar,
           })
           .then(data => {
@@ -328,7 +368,7 @@ class SignUp extends Component {
           phoneNumber: '',
           password: '',
         });
-        this.props.navigation.navigate('Login');
+        this.props.navigation.navigate('Mate');
       })
       .catch(error => {
         Toast.show({
