@@ -25,7 +25,6 @@ import * as firebaseRN from 'firebase';
 import {firebase} from '@react-native-firebase/storage';
 import {SkypeIndicator} from 'react-native-indicators';
 import ImagePicker from 'react-native-image-picker';
-import {NavigationEvents} from 'react-navigation';
 
 if (!firebase.apps.length) {
   firebase.initializeApp({
@@ -201,10 +200,23 @@ class EditProfile extends Component {
       );
     } else {
       return (
-        <TouchableOpacity
-          style={styles.btnEditProfile}
-          onPress={() => this.updateProfile()}>
-          <Text style={{color: '#ffff', fontSize: 18}}>Edit Profil</Text>
+        <TouchableOpacity onPress={() => this.updateProfile()}>
+          {/* <Button>
+            <Text style={{color: '#ffff', fontSize: 18}}>Edit Profil</Text>
+          </Button> */}
+          <Button
+            style={{
+              justifyContent: 'center',
+              backgroundColor: '#3076E0',
+              paddingVertical: 10,
+              elevation: 0,
+              height: 60,
+              borderWidth: 0.5,
+              borderColor: 'gray',
+            }}
+            onPress={() => this.UploadImage()}>
+            <Text>Edit Profil</Text>
+          </Button>
         </TouchableOpacity>
       );
     }
@@ -242,7 +254,9 @@ class EditProfile extends Component {
         </Header>
         <Content>
           <View style={styles.contentEditProfile}>
-            <Item regular>
+            <Item
+              regular
+              style={{backgroundColor: '#f8f8f8', marginVertical: 12}}>
               <Input
                 disabled
                 style={{color: '#252d39'}}
@@ -251,7 +265,7 @@ class EditProfile extends Component {
                 onChangeText={val => this.setState({username: val})}
               />
             </Item>
-            <Item regular>
+            <Item regular style={{}}>
               <Input
                 style={{color: '#252d39'}}
                 placeholder={'Nama kamu'}
@@ -259,7 +273,7 @@ class EditProfile extends Component {
                 onChangeText={val => this.setState({name: val})}
               />
             </Item>
-            <Item regular>
+            <Item regular style={{marginVertical: 12}}>
               <Input
                 style={{color: '#252d39'}}
                 placeholder={'Telepon kamu'}
@@ -267,15 +281,15 @@ class EditProfile extends Component {
                 onChangeText={val => this.setState({phoneNumber: val})}
               />
             </Item>
-            <Item regular style={{marginTop: 10}}>
+            <Item regular>
               <Input
                 style={{color: '#252d39'}}
-                placeholder={'update Status mu'}
+                placeholder={'update status'}
                 value={this.state.status}
                 onChangeText={val => this.setState({status: val})}
               />
             </Item>
-            <View style={{paddingVertical: 5}}>
+            <View style={{paddingVertical: 5, marginTop: 20}}>
               <Button
                 style={{
                   justifyContent: 'center',
@@ -287,7 +301,7 @@ class EditProfile extends Component {
                   borderColor: 'gray',
                 }}
                 onPress={() => this.UploadImage()}>
-                <Text>Edit Profile Picture</Text>
+                <Text>Edit Profil Avatar</Text>
               </Button>
             </View>
             {this.__renderButtonEditProfile()}
@@ -302,14 +316,17 @@ const styles = StyleSheet.create({
   contentEditProfile: {
     paddingVertical: 25,
     paddingHorizontal: 15,
+    flex: 1,
+    justifyContent: 'center',
   },
   btnEditProfile: {
-    alignItems: 'center',
-    marginTop: 30,
-    paddingHorizontal: 15,
-    paddingVertical: 15,
+    justifyContent: 'center',
     backgroundColor: '#3076E0',
-    elevation: 3,
+    paddingVertical: 10,
+    elevation: 0,
+    height: 60,
+    borderWidth: 0.5,
+    borderColor: 'gray',
   },
 });
 
