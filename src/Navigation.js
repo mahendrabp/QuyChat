@@ -16,6 +16,8 @@ import InitNavigation from './Screens/InitNavigation';
 import Logout from './Screens/Auth/Logout';
 import Location from './Screens/Mate//Location';
 import MateProfile from './Screens/Mate/MateProfile';
+import Profile from './Screens/Profile/Profile';
+import EditProfile from './Screens/Profile/EditProfile';
 
 const TabNavigation = createMaterialBottomTabNavigator(
   {
@@ -37,20 +39,20 @@ const TabNavigation = createMaterialBottomTabNavigator(
     ListMate: {
       screen: ListMate,
       navigationOptions: {
-        tabBarLabel: 'Mate',
+        tabBarLabel: 'Status',
         tabBarIcon: ({tintColor}) => (
           <View>
             <MaterialCommunityIcons
               style={[{color: tintColor}]}
               size={25}
-              name={'account-group'}
+              name={'book-open-page-variant'}
             />
           </View>
         ),
       },
     },
-    Logout: {
-      screen: Logout,
+    Profile: {
+      screen: Profile,
       navigationOptions: {
         tabBarLabel: 'Profil',
         tabBarIcon: ({tintColor}) => (
@@ -106,6 +108,12 @@ const MainNavigator = createStackNavigator(
     },
     SignUp: {
       screen: SignUp,
+      navigationOptions: {
+        header: null,
+      },
+    },
+    EditProfile: {
+      screen: EditProfile,
       navigationOptions: {
         header: null,
       },

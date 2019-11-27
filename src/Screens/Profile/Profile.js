@@ -13,7 +13,7 @@ import {
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import * as firebase from 'firebase';
 
-class Logout extends Component {
+class Profile extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -85,6 +85,23 @@ class Logout extends Component {
             </Grid>
           </View>
           <View style={styles.contentSetting}>
+            <TouchableOpacity
+              onPress={() => this.props.navigation.navigate('EditProfile')}>
+              <Grid>
+                <Row style={{paddingVertical: 10}}>
+                  <Col style={{width: '15%'}}>
+                    <FontAwesome
+                      style={[{color: '#1F95CC'}]}
+                      size={25}
+                      name={'user'}
+                    />
+                  </Col>
+                  <Col>
+                    <Text style={{color: '#252d39'}}>Edit Profil</Text>
+                  </Col>
+                </Row>
+              </Grid>
+            </TouchableOpacity>
             <TouchableOpacity onPress={() => this.logout()}>
               <Grid>
                 <Row style={{paddingVertical: 10}}>
@@ -96,7 +113,7 @@ class Logout extends Component {
                     />
                   </Col>
                   <Col>
-                    <Text style={{color: '#252d39'}}>Logout</Text>
+                    <Text style={{color: '#252d39'}}>Keluar</Text>
                   </Col>
                 </Row>
               </Grid>
@@ -122,8 +139,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 25,
     paddingVertical: 7,
-    // backgroundColor: 'red',
   },
 });
 
-export default Logout;
+export default Profile;

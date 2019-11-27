@@ -1,50 +1,3 @@
-// import React from 'react';
-
-// import {StyleSheet, View, Text, Image} from 'react-native';
-// import * as firebase from 'firebase';
-
-// class ListMate extends React.Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = {
-//       username: '',
-//       email: '',
-//       avatar: '',
-//       status: '',
-//       mates: [],
-//     };
-//   }
-
-//   componentDidMount() {
-//     this.getMate();
-//   }
-
-//   getMeProfile() {}
-
-//   getMate() {
-//     console.log(
-//       firebase
-//         .database()
-//         .ref(`/users/`)
-//         .on('value', snapshot => {
-//           const dataMates = snapshot.val();
-//           this.setState({
-//             mates: dataMates,
-//           });
-//         }),
-//     );
-//   }
-//   render() {
-//     return (
-//       <View>
-//         <Text>INI LIST MATE</Text>
-//       </View>
-//     );
-//   }
-// }
-
-// export default ListMate;
-
 import React, {Component} from 'react';
 import {View, StyleSheet, TouchableOpacity} from 'react-native';
 import {
@@ -130,7 +83,7 @@ class ListMate extends Component {
                       fontWeight: 'bold',
                       fontFamily: 'Roboto',
                     }}>
-                    Mates
+                    Status
                   </Text>
                 </Col>
                 {/* <Col></Col> */}
@@ -160,15 +113,15 @@ class ListMate extends Component {
           </View>
           <View style={styles.contentChats}>
             <View style={styles.contentMyContat}>
-              <Text
+              {/* <Text
                 style={{
                   paddingHorizontal: 10,
                   color: '#252d39',
                   fontWeight: 'bold',
                 }}>
                 Profil ku
-              </Text>
-              <List>
+              </Text> */}
+              {/* <List>
                 <ListItem avatar>
                   <Left>
                     <Thumbnail source={{uri: `${this.state.avatar}`}} />
@@ -178,7 +131,7 @@ class ListMate extends Component {
                     <Text note>{this.state.status}</Text>
                   </Body>
                 </ListItem>
-              </List>
+              </List> */}
             </View>
             <View style={{paddingVertical: 20}}>
               <Text
@@ -214,7 +167,7 @@ class ListMate extends Component {
                           </Left>
                           <Body style={{marginTop: 10}}>
                             <Text>{this.state.mates[key].username}</Text>
-                            {/* <Text note>{this.state.mates[key].email}</Text> */}
+                            <Text note>{this.state.mates[key].status}</Text>
                           </Body>
                         </ListItem>
                       </List>
