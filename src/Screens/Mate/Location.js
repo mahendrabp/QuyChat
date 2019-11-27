@@ -31,10 +31,10 @@ class Location extends Component {
       avatar: '',
       status: '',
       mates: [],
-      longitude: '',
-      latitude: '',
-      initLocation: '',
-      currentPostion: '',
+      latitude: -6.225648,
+      longitude: 106.85829,
+      initLocation: 'unknown',
+      currentLocation: 'unknown',
     };
   }
 
@@ -42,40 +42,34 @@ class Location extends Component {
     this.getLocation();
   }
 
+  watchID: ?number = null;
+
+  async getLocation() {
+    await Geolocation.getCurrentPosition(
+      position => {
+        const initLocation = JSON.stringify(position);
+        this.setState({
+          initLocation: initLocation,
+          // latitude: position.coords.latitude,
+          // longitude: position.coords.longitude,
+        });
+      },
+      error => {},
+      {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000},
+    );
+    this.watchID = Geolocation.watchPosition(position => {
+      const currentLocation = JSON.stringify(position);
+      this.setState({
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+        currentLocation,
+      });
+    });
+  }
+
   componentWillUnmount() {
     this.watchID != null && Geolocation.clearWatch(this.watchID);
   }
-
-  watchID: ?number = null;
-
-  getLocation = async () => {
-    Geolocation.getCurrentPosition(
-      position => {
-        console.log(position);
-        this.setState({
-          initLocation: position,
-        });
-      },
-      error => {
-        console.log(error);
-      },
-      {enableHighAccuracy: true},
-    );
-
-    this.watchId = Geolocation.watchPosition(
-      position => {
-        this.setState({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-          currentPostion: position,
-        });
-      },
-      error => {
-        console.log(error);
-      },
-      {enableHighAccuracy: true},
-    );
-  };
 
   render() {
     let mateMap;
@@ -100,8 +94,8 @@ class Location extends Component {
           }}>
           <Marker
             coordinate={{
-              latitude: this.props.navigation.getParam('latitude'),
-              longitude: this.props.navigation.getParam('longitude'),
+              latitude: this.state.latitude,
+              longitude: this.state.longitude,
               latitudeDelta: 0.01,
               longitudeDelta: 0.01,
             }}
@@ -117,6 +111,17 @@ class Location extends Component {
           </TouchableOpacity>
         </View>
       </Container>
+      // <View>
+      //   <Text>Initial position:</Text>
+
+      //   <Text>{this.state.initLocation}</Text>
+
+      //   <Text>Current position:</Text>
+
+      //   <Text>{this.state.currentLocation}</Text>
+      //   <Text>{this.state.latitude}</Text>
+      //   <Text>{this.state.longitude}</Text>
+      // </View>
     );
   }
 }

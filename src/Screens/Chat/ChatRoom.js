@@ -27,7 +27,7 @@ class ChatRoom extends Component {
   async componentWillMount() {
     await this.setState({
       Messages: [],
-      name: firebase.auth().currentUser.displayName,
+      name: firebase.auth().currentUser.displayName.replace(/ /g, '_'),
       email: firebase.auth().currentUser.email,
       displayName: this.props.navigation.getParam('username'),
     });
@@ -213,8 +213,8 @@ class ChatRoom extends Component {
                         onPress={() =>
                           this.props.navigation.navigate('Location', {
                             username: this.state.displayName,
-                            // latitude: this.state.latitude,
-                            // longitude: this.state.longitude,
+                            latitude: this.state.latitude,
+                            longitude: this.state.longitude,
                           })
                         }>
                         <FontAwesome

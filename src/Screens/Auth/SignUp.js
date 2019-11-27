@@ -363,7 +363,7 @@ class SignUp extends Component {
         const userCollection = 'users/' + userEdited;
         console.log(result);
         result.user.updateProfile({
-          displayName: this.state.username,
+          displayName: this.state.username.replace(/ /g, '_'),
         });
         const avatar =
           `https://ui-avatars.com/api/?size=256&rounded=true&background=${(
