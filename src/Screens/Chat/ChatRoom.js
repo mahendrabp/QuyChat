@@ -22,6 +22,8 @@ class ChatRoom extends Component {
     email: '',
     phoneNumber: '',
     id: '',
+    emailUser: '',
+    avatarUser: '',
   };
 
   async componentWillMount() {
@@ -36,6 +38,7 @@ class ChatRoom extends Component {
     this.getDatauser();
   }
 
+  //user data ours login account
   userData = () => {
     return {
       name: firebase.auth().currentUser.displayName,
@@ -105,6 +108,8 @@ class ChatRoom extends Component {
           phoneNumber: data.val().phoneNumber,
           latitude: data.val().latitude,
           longitude: data.val().longitude,
+          emailUser: data.val().email,
+          avatarUser: data.val().avatar,
         });
       });
   }
@@ -114,15 +119,19 @@ class ChatRoom extends Component {
     Linking.openURL(phoneNumber);
   }
 
+  _menu = null;
+
   setMenuRef = ref => {
     this._menu = ref;
+  };
+
+  hideMenu = () => {
+    this._menu.hide();
   };
 
   showMenu = () => {
     this._menu.show();
   };
-
-  _menu = null;
 
   customBubble = props => {
     return (
@@ -241,7 +250,19 @@ class ChatRoom extends Component {
                               onPress={this.showMenu}
                             />
                           }>
-                          <MenuItem onPress={this.hideMenu}>Profil</MenuItem>
+                          <MenuItem
+                            onPress={() => {
+                              this.hideMenu();
+                              this.props.navigation.navigate('MateProfile', {
+                                username: this.state.displayName,
+                                email: this.state.emailUser,
+                                avatar: this.state.avatarUser,
+                                latitude: this.state.latitude,
+                                longitude: this.state.longitude,
+                              });
+                            }}>
+                            Profil
+                          </MenuItem>
 
                           <MenuDivider />
                           <MenuItem onPress={this.hideMenu}>

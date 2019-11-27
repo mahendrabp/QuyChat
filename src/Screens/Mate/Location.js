@@ -1,22 +1,6 @@
 import React, {Component} from 'react';
 import {View, StyleSheet, TouchableOpacity} from 'react-native';
-import {
-  Container,
-  Header,
-  Content,
-  Icon,
-  Text,
-  Grid,
-  Row,
-  Col,
-  Item,
-  Input,
-  List,
-  ListItem,
-  Left,
-  Thumbnail,
-  Body,
-} from 'native-base';
+import {Container, Header, Icon} from 'native-base';
 
 import * as firebase from 'firebase';
 import MapView, {Marker} from 'react-native-maps';
@@ -31,8 +15,8 @@ class Location extends Component {
       avatar: '',
       status: '',
       mates: [],
-      latitude: -6.225648,
-      longitude: 106.85829,
+      latitude: -6.6194727,
+      longitude: 106.8241719,
       initLocation: 'unknown',
       currentLocation: 'unknown',
     };

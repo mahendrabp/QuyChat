@@ -15,6 +15,7 @@ import ListMate from './Screens/Mate/ListMate';
 import InitNavigation from './Screens/InitNavigation';
 import Logout from './Screens/Auth/Logout';
 import Location from './Screens/Mate//Location';
+import MateProfile from './Screens/Mate/MateProfile';
 
 const TabNavigation = createMaterialBottomTabNavigator(
   {
@@ -87,6 +88,12 @@ const MainNavigator = createStackNavigator(
     },
     ChatRoom: {
       screen: ChatRoom,
+      navigationOptions: {
+        header: null,
+      },
+    },
+    MateProfile: {
+      screen: MateProfile,
       navigationOptions: {
         header: null,
       },
