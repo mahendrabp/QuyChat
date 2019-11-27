@@ -17,8 +17,8 @@ class Location extends Component {
       mates: [],
       latitude: -6.6194727,
       longitude: 106.8241719,
-      initLocation: 'unknown',
-      currentLocation: 'unknown',
+      initLocation: 'n/a',
+      currentLocation: 'n/a',
     };
   }
 
