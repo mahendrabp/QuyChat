@@ -87,23 +87,21 @@ class Location extends Component {
           noShadow={true}></Header>
 
         <MapView
-          // remove if not using Google Maps
-
           style={{
             position: 'absolute',
             width: '100%',
             height: '90%',
           }}
           region={{
-            latitude: -6.619849,
-            longitude: 106.818552,
+            latitude: this.state.latitude,
+            longitude: this.state.longitude,
             latitudeDelta: 0.01,
             longitudeDelta: 0.01,
           }}>
           <Marker
             coordinate={{
-              latitude: -6.619849,
-              longitude: 106.818552,
+              latitude: this.props.navigation.getParam('latitude'),
+              longitude: this.props.navigation.getParam('longitude'),
               latitudeDelta: 0.01,
               longitudeDelta: 0.01,
             }}
@@ -111,7 +109,7 @@ class Location extends Component {
             description={'test desc'}
           />
         </MapView>
-        <View style={{marginLeft: 20, backgroundColor: 'red'}}>
+        <View style={{marginLeft: 20}}>
           <TouchableOpacity
             style={styles.btnBack}
             onPress={() => this.props.navigation.goBack()}>
@@ -137,8 +135,8 @@ const styles = StyleSheet.create({
   btnBack: {
     position: 'absolute',
     backgroundColor: '#1F95CC',
-    paddingVertical: 5,
-    paddingHorizontal: 5,
+    paddingVertical: 10,
+    paddingHorizontal: 10,
     borderRadius: 30,
   },
 });

@@ -98,7 +98,7 @@ class ListMate extends Component {
   }
 
   async getDataProfile() {
-    const userCollection = '/users/' + firebase.auth().currentUser.uid;
+    const userCollection = 'users/' + firebase.auth().currentUser.displayName;
     await firebase
       .database()
       .ref(userCollection)

@@ -25,6 +25,8 @@ class ListChat extends Component {
       status: '',
       phoneNumber: '',
       avatar: '',
+      latitude: '',
+      longitude: '',
       users: [],
       text: '',
     };
@@ -165,6 +167,8 @@ class ListChat extends Component {
                         onPress={() =>
                           this.props.navigation.navigate('ChatRoom', {
                             username: this.state.users[key].username,
+                            latitude: this.state.users[key].latitude,
+                            longitude: this.state.users[key].longitude,
                           })
                         }
                         style={styles.touchable}>

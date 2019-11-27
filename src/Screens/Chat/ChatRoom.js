@@ -96,18 +96,17 @@ class ChatRoom extends Component {
   }
 
   async getDatauser() {
-    const user = firebase.auth().currentUser;
-    const userCollection = `/users/${user.uid}`;
-    console.log(userCollection);
+    const userCollection = 'users/' + this.state.displayName;
     await firebase
       .database()
       .ref(userCollection)
       .once('value', data => {
         this.setState({
           phoneNumber: data.val().phoneNumber,
+          latitude: data.val().latitude,
+          longitude: data.val().longitude,
         });
       });
-    // console.log(this.state.phoneNumber);
   }
 
   callPhone() {

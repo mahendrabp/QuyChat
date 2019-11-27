@@ -1,28 +1,16 @@
 import {
   StyleSheet,
   Text,
-  TextInput,
   View,
   Alert,
   Image,
   TouchableOpacity,
   BackHandler,
 } from 'react-native';
-import {
-  Form,
-  Item,
-  Label,
-  Input,
-  Icon,
-  Button,
-  Header,
-  Container,
-  Content,
-} from 'native-base';
+import {Item, Input, Icon, Button} from 'native-base';
 import * as firebase from 'firebase';
 import React, {Component} from 'react';
-import {BarIndicator, SkypeIndicator} from 'react-native-indicators';
-import LottieView from 'lottie-react-native';
+import {SkypeIndicator} from 'react-native-indicators';
 
 if (!firebase.apps.length) {
   firebase.initializeApp({

@@ -199,7 +199,7 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 // import firebaseSDK from '../../Configs/firebaseSDK';
 import Geolocation from '@react-native-community/geolocation';
 
-Geolocation.getCurrentPosition(info => console.log(info));
+// Geolocation.getCurrentPosition(info => console.log(info));
 // Initialize Firebase
 if (!firebase.apps.length) {
   firebase.initializeApp({
@@ -222,8 +222,8 @@ class SignUp extends Component {
       phoneNumber: '',
       name: '',
       username: '',
-      longitude: '',
-      latitude: '',
+      longitude: 0,
+      latitude: 0,
       initLocation: '',
       currentPostion: '',
       isError: '',
@@ -234,40 +234,63 @@ class SignUp extends Component {
     };
   }
 
-  componentDidMount() {
-    this.getLocation();
+  async componentDidMount() {
+    await this.getLocation();
+    this.watchID = Geolocation.watchPosition(
+      position => {
+        const {latitude, longitude} = position.coords;
+        this.setState({
+          latitude,
+          longitude,
+        });
+      },
+      error => console.log(error),
+      {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000},
+    );
+    console.log(this.watchID);
   }
-  getLocation = async () => {
-    Geolocation.getCurrentPosition(
+
+  componentWillUnmount() {
+    this.watchID != null && Geolocation.clearWatch(this.watchID);
+  }
+
+  watchID: ?number = null;
+
+  async getLocation() {
+    await Geolocation.getCurrentPosition(
       position => {
         // console.log(JSON.stringify(position));
-        // const initLocation = JSON.stringify(position);
+        const {latitude, longitude} = position.coords;
+        const initLocation = JSON.stringify(position);
         this.setState({
-          initLocation: position,
+          latitude,
+          longitude,
+          initLocation,
         });
       },
       error => {
-        console.log(error);
+        // console.log(error);
         Alert.alert(error.message);
       },
       {enableHighAccuracy: true, distanceFilter: 1},
     );
 
-    this.watchId = Geolocation.watchPosition(
-      position => {
-        console.log(position);
-        this.setState({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-          currentPostion: position,
-        });
-      },
-      error => {
-        console.log(error);
-      },
-      {enableHighAccuracy: true},
-    );
-  };
+    // this.watchId = Geolocation.watchPosition(
+    //   position => {
+    //     const {latitude, longitude} = position.coords;
+    //     console.log(position);
+    //     this.setState({
+    //       latitude,
+    //       longitude,
+    //       currentPostion: position,
+    //     });
+    //   },
+    //   error => {
+    //     console.log(error);
+    //   },
+    //   {enableHighAccuracy: true},
+    // );
+  }
 
   onChangeEmail = value => {
     let validationRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
@@ -298,7 +321,14 @@ class SignUp extends Component {
       isLoading: true,
     });
 
-    const {email, password, name, username, phoneNumber} = this.state;
+    const {
+      email,
+      password,
+      name,
+      phoneNumber,
+      latitude,
+      longitude,
+    } = this.state;
     //init this collection for firebase
     // const user = firebase.auth().currentUser;
     // const userCollection = `/users/${user.uid}`;
@@ -328,8 +358,9 @@ class SignUp extends Component {
       .auth()
       .createUserWithEmailAndPassword(email, password)
       .then(result => {
-        const user = firebase.auth().currentUser;
-        const userCollection = `/users/${user.uid}`;
+        // const user = firebase.auth().currentUser;
+        const userEdited = this.state.username.replace(/ /g, '_');
+        const userCollection = 'users/' + userEdited;
         console.log(result);
         result.user.updateProfile({
           displayName: this.state.username,
@@ -338,16 +369,18 @@ class SignUp extends Component {
           `https://ui-avatars.com/api/?size=256&rounded=true&background=${(
             ((1 << 24) * Math.random()) |
             0
-          ).toString(16)}&name=` + this.state.username.replace(' ', '+');
+          ).toString(16)}&name=` + this.state.username.replace(/ /g, '+');
         firebase
           .database()
           .ref(userCollection)
           .set({
-            username,
+            username: this.state.username.replace(/ /g, '_'),
             email,
             phoneNumber,
-
+            name,
             avatar: avatar,
+            latitude,
+            longitude,
           })
           .then(data => {
             console.log('Data : ', data);
