@@ -21,9 +21,23 @@ import {
   Button,
 } from 'native-base';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import * as firebase from 'firebase';
+import * as firebaseRN from 'firebase';
+import {firebase} from '@react-native-firebase/storage';
 import {SkypeIndicator} from 'react-native-indicators';
 import ImagePicker from 'react-native-image-picker';
+import {NavigationEvents} from 'react-navigation';
+
+if (!firebase.apps.length) {
+  firebase.initializeApp({
+    apiKey: 'AIzaSyDFGvksTN7eLHLpG4DfHQhnnzhwoMNc5Ls',
+    authDomain: 'quychat-bima.firebaseapp.com',
+    databaseURL: 'https://quychat-bima.firebaseio.com',
+    projectId: 'quychat-bima',
+    storageBucket: 'quychat-bima.appspot.com',
+    messagingSenderId: '633612731220',
+    appId: '1:633612731220:web:77c85853c0f71ef2107ec1',
+  });
+}
 
 class EditProfile extends Component {
   constructor(props) {
@@ -43,8 +57,8 @@ class EditProfile extends Component {
   }
 
   async getUserData() {
-    const userCollection = 'users/' + firebase.auth().currentUser.displayName;
-    await firebase
+    const userCollection = 'users/' + firebaseRN.auth().currentUser.displayName;
+    await firebaseRN
       .database()
       .ref(userCollection)
       .once('value', data => {
@@ -73,8 +87,8 @@ class EditProfile extends Component {
       isLoading: true,
     });
 
-    const userCollection = 'users/' + firebase.auth().currentUser.displayName;
-    await firebase
+    const userCollection = 'users/' + firebaseRN.auth().currentUser.displayName;
+    await firebaseRN
       .database()
       .ref(userCollection)
       .update({
@@ -87,7 +101,7 @@ class EditProfile extends Component {
       isLoading: false,
     });
     Toast.show({
-      text: 'Akun QuyChat berhasil dibuat',
+      text: 'Profil berhasil di edit',
       buttonText: 'Ok',
       type: 'success',
       duration: 2000,
@@ -105,16 +119,16 @@ class EditProfile extends Component {
         this.setState({imageName: Image.fileName});
 
         Alert.alert(
-          'Edit Image',
-          `Is this image: ${Image.fileName}, you want to upload?`,
+          'Ganti Avatar',
+          `Apalah file ini : ${Image.fileName}, benar?`,
           [
-            {text: 'No', style: 'cancel'},
-            {text: 'Yes', onPress: () => upload()},
+            {text: 'Tidak', style: 'cancel'},
+            {text: 'Ya', onPress: () => upload()},
           ],
           {cancelable: false},
         );
 
-        const uid = firebase.auth().currentUser.displayName;
+        const uid = firebaseRN.auth().currentUser.displayName;
 
         const upload = () => {
           firebase
@@ -132,17 +146,17 @@ class EditProfile extends Component {
                   ToastAndroid.SHORT,
                 );
 
-                switch (snapshot.state) {
-                  case firebase.storage.TaskState.PAUSED:
-                    ToastAndroid.show('Upload is paused', ToastAndroid.SHORT);
-                    break;
-                  case firebase.storage.TaskState.RUNNING:
-                    ToastAndroid.show(
-                      'Upload is running...',
-                      ToastAndroid.SHORT,
-                    );
-                    break;
-                }
+                // switch (snapshot.state) {
+                //   case firebase.storage.TaskState.PAUSED:
+                //     ToastAndroid.show('Upload is paused', ToastAndroid.SHORT);
+                //     break;
+                //   case firebase.storage.TaskState.RUNNING:
+                //     ToastAndroid.show(
+                //       'Upload is running...',
+                //       ToastAndroid.SHORT,
+                //     );
+                //     break;
+                // }
               },
               error => {
                 switch (error.code) {
@@ -158,7 +172,7 @@ class EditProfile extends Component {
                 }
               },
               () => {
-                ToastAndroid.show('Upload Successfully!', ToastAndroid.LONG);
+                ToastAndroid.show('Sukses Upload avatar!', ToastAndroid.LONG);
                 firebase
                   .storage()
                   .refFromURL(
@@ -166,7 +180,7 @@ class EditProfile extends Component {
                   )
                   .getDownloadURL()
                   .then(url => {
-                    firebase
+                    firebaseRN
                       .database()
                       .ref(`users/${uid}`)
                       .update({avatar: url});

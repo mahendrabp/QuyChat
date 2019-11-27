@@ -284,6 +284,7 @@ class ChatRoom extends Component {
           placeholder={'Ketik pesan...'}
           renderBubble={this.customBubble}
           renderSend={this.renderSend}
+          renderAvatar={null}
         />
       </Container>
     );

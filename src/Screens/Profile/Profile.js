@@ -12,6 +12,7 @@ import {
 } from 'native-base';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import * as firebase from 'firebase';
+import {NavigationEvents} from 'react-navigation';
 
 class Profile extends Component {
   constructor(props) {
@@ -51,6 +52,7 @@ class Profile extends Component {
   render() {
     return (
       <Container>
+        <NavigationEvents onWillFocus={() => this.getDataProfile()} />
         <Header
           style={{backgroundColor: '#1F95CC'}}
           androidStatusBarColor="#1F95CC"
