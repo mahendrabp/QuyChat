@@ -68,6 +68,14 @@ class ChatRoom extends Component {
         .database()
         .ref(`Messages/${this.state.displayName}/${this.state.name}`)
         .push(message);
+      await firebase
+        .database()
+        .ref(`users/${this.state.displayName}`)
+        .update({text: text});
+      await firebase
+        .database()
+        .ref(`users/${this.state.name}`)
+        .update({text: text});
     }
   };
 

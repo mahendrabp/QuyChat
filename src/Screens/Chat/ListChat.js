@@ -29,6 +29,7 @@ class ListChat extends Component {
       longitude: '',
       users: [],
       text: '',
+      search: '',
     };
   }
 
@@ -148,6 +149,7 @@ class ListChat extends Component {
                 placeholder="cari percakapan..."
                 placeholderTextColor="#FFFFFF"
                 style={{color: '#FFFFFF', height: 40, marginLeft: 15}}
+                onChangeText={text => this.setState({search: text})}
               />
               <Icon
                 active
@@ -159,11 +161,19 @@ class ListChat extends Component {
           <View style={styles.contentChats}>
             {Object.keys(this.state.users)
               .filter(
-                val =>
-                  this.state.users[val].email.toLowerCase() !==
-                  this.state.email,
+                this.state.search === ''
+                  ? val =>
+                      this.state.users[val].email.toLowerCase() !==
+                      this.state.email
+                  : val =>
+                      this.state.users[val].email.toLowerCase() !==
+                        this.state.email &&
+                      this.state.users[val].username.includes(
+                        this.state.search,
+                      ),
               )
               .map(key => {
+                console.log(key);
                 return (
                   <>
                     <View key={this.state.users[key]}>
@@ -205,7 +215,7 @@ class ListChat extends Component {
                               {this.state.users[key].name}
                             </Text>
                             <Text style={{fontSize: 16, color: '#bcbdc6'}}>
-                              {this.state.users[key].email.toLowerCase()}
+                              {this.state.users[key].text}
                             </Text>
                             {/* {this.getMessage(key)} */}
                             {/* <Text>{this.state.text}</Text> */}
