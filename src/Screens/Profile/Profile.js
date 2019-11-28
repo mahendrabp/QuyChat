@@ -1,5 +1,11 @@
 import React, {Component} from 'react';
-import {View, StyleSheet, TouchableOpacity} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  ToastAndroid,
+  Alert,
+} from 'react-native';
 import {
   Container,
   Header,
@@ -11,8 +17,11 @@ import {
   Thumbnail,
 } from 'native-base';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import * as firebase from 'firebase';
+// import * as firebase from 'firebase';
 import {NavigationEvents} from 'react-navigation';
+import * as firebaseRN from 'firebase';
+import {firebase} from '@react-native-firebase/storage';
+import ImagePicker from 'react-native-image-picker';
 
 class Profile extends Component {
   constructor(props) {
@@ -30,8 +39,8 @@ class Profile extends Component {
   }
 
   async getDataProfile() {
-    const userCollection = 'users/' + firebase.auth().currentUser.displayName;
-    await firebase
+    const userCollection = 'users/' + firebaseRN.auth().currentUser.displayName;
+    await firebaseRN
       .database()
       .ref(userCollection)
       .once('value', data => {
@@ -43,8 +52,93 @@ class Profile extends Component {
         });
       });
   }
+
+  UploadImage = () => {
+    const options = {
+      noData: true,
+    };
+
+    ImagePicker.showImagePicker(options, response => {
+      if (response.uri) {
+        const Image = response;
+        this.setState({imageName: Image.fileName});
+
+        Alert.alert(
+          'Ganti Avatar',
+          `Apalah file ini : ${Image.fileName}, benar?`,
+          [
+            {text: 'Tidak', style: 'cancel'},
+            {text: 'Ya', onPress: () => upload()},
+          ],
+          {cancelable: false},
+        );
+
+        const uid = firebaseRN.auth().currentUser.displayName;
+
+        const upload = () => {
+          firebase
+            .storage()
+            .ref()
+            .child(`images/${uid}/${Image.fileName}`)
+            .putFile(Image.path)
+            .on(
+              firebase.storage.TaskEvent.STATE_CHANGED,
+              snapshot => {
+                let progess =
+                  (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                ToastAndroid.show(
+                  `Upload is ${progess}% done`,
+                  ToastAndroid.SHORT,
+                );
+
+                // switch (snapshot.state) {
+                //   case firebase.storage.TaskState.PAUSED:
+                //     ToastAndroid.show('Upload is paused', ToastAndroid.SHORT);
+                //     break;
+                //   case firebase.storage.TaskState.RUNNING:
+                //     ToastAndroid.show(
+                //       'Upload is running...',
+                //       ToastAndroid.SHORT,
+                //     );
+                //     break;
+                // }
+              },
+              error => {
+                switch (error.code) {
+                  case 'storage/unauthorized':
+                    ToastAndroid.show('Unauthorized', ToastAndroid.SHORT);
+                    break;
+                  case 'storage/canceled':
+                    ToastAndroid.show('Canceled by User', ToastAndroid.SHORT);
+                    break;
+                  case 'storage/unknown':
+                    ToastAndroid.show('Error Unknown', ToastAndroid.SHORT);
+                    break;
+                }
+              },
+              () => {
+                ToastAndroid.show('Sukses Upload avatar!', ToastAndroid.LONG);
+
+                firebase
+                  .storage()
+                  .refFromURL(
+                    `gs://quychat-bima.appspot.com/images/${uid}/${Image.fileName}`,
+                  )
+                  .getDownloadURL()
+                  .then(url => {
+                    firebaseRN
+                      .database()
+                      .ref(`users/${uid}`)
+                      .update({avatar: url});
+                  });
+              },
+            );
+        };
+      }
+    });
+  };
   async logout() {
-    await firebase.auth().signOut();
+    await firebaseRN.auth().signOut();
     this.props.navigation.replace('Login');
     console.log('Logged out!');
   }
@@ -52,7 +146,7 @@ class Profile extends Component {
   render() {
     return (
       <Container>
-        <NavigationEvents onWillFocus={() => this.getDataProfile()} />
+        <NavigationEvents onDidFocus={() => this.getDataProfile()} />
         <Header
           style={{backgroundColor: '#1F95CC'}}
           androidStatusBarColor="#1F95CC"
@@ -66,7 +160,9 @@ class Profile extends Component {
             <Grid>
               <Row style={{paddingVertical: 15}}>
                 <Col style={{alignItems: 'center'}}>
-                  <Thumbnail source={{uri: `${this.state.avatar}`}} />
+                  <TouchableOpacity onPress={() => this.UploadImage()}>
+                    <Thumbnail source={{uri: `${this.state.avatar}`}} />
+                  </TouchableOpacity>
                 </Col>
               </Row>
               <Row>

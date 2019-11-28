@@ -23,8 +23,8 @@ import {
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import * as firebaseRN from 'firebase';
 import {firebase} from '@react-native-firebase/storage';
-import {SkypeIndicator} from 'react-native-indicators';
 import ImagePicker from 'react-native-image-picker';
+import {SkypeIndicator} from 'react-native-indicators';
 
 if (!firebase.apps.length) {
   firebase.initializeApp({
@@ -107,89 +107,89 @@ class EditProfile extends Component {
     });
   }
 
-  UploadImage = () => {
-    const options = {
-      noData: true,
-    };
+  // UploadImage = () => {
+  //   const options = {
+  //     noData: true,
+  //   };
 
-    ImagePicker.showImagePicker(options, response => {
-      if (response.uri) {
-        const Image = response;
-        this.setState({imageName: Image.fileName});
+  //   ImagePicker.showImagePicker(options, response => {
+  //     if (response.uri) {
+  //       const Image = response;
+  //       this.setState({imageName: Image.fileName});
 
-        Alert.alert(
-          'Ganti Avatar',
-          `Apalah file ini : ${Image.fileName}, benar?`,
-          [
-            {text: 'Tidak', style: 'cancel'},
-            {text: 'Ya', onPress: () => upload()},
-          ],
-          {cancelable: false},
-        );
+  //       Alert.alert(
+  //         'Ganti Avatar',
+  //         `Apalah file ini : ${Image.fileName}, benar?`,
+  //         [
+  //           {text: 'Tidak', style: 'cancel'},
+  //           {text: 'Ya', onPress: () => upload()},
+  //         ],
+  //         {cancelable: false},
+  //       );
 
-        const uid = firebaseRN.auth().currentUser.displayName;
+  //       const uid = firebaseRN.auth().currentUser.displayName;
 
-        const upload = () => {
-          firebase
-            .storage()
-            .ref()
-            .child(`images/${uid}/${Image.fileName}`)
-            .putFile(Image.path)
-            .on(
-              firebase.storage.TaskEvent.STATE_CHANGED,
-              snapshot => {
-                let progess =
-                  (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                ToastAndroid.show(
-                  `Upload is ${progess}% done`,
-                  ToastAndroid.SHORT,
-                );
+  //       const upload = () => {
+  //         firebase
+  //           .storage()
+  //           .ref()
+  //           .child(`images/${uid}/${Image.fileName}`)
+  //           .putFile(Image.path)
+  //           .on(
+  //             firebase.storage.TaskEvent.STATE_CHANGED,
+  //             snapshot => {
+  //               let progess =
+  //                 (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+  //               ToastAndroid.show(
+  //                 `Upload is ${progess}% done`,
+  //                 ToastAndroid.SHORT,
+  //               );
 
-                // switch (snapshot.state) {
-                //   case firebase.storage.TaskState.PAUSED:
-                //     ToastAndroid.show('Upload is paused', ToastAndroid.SHORT);
-                //     break;
-                //   case firebase.storage.TaskState.RUNNING:
-                //     ToastAndroid.show(
-                //       'Upload is running...',
-                //       ToastAndroid.SHORT,
-                //     );
-                //     break;
-                // }
-              },
-              error => {
-                switch (error.code) {
-                  case 'storage/unauthorized':
-                    ToastAndroid.show('Unauthorized', ToastAndroid.SHORT);
-                    break;
-                  case 'storage/canceled':
-                    ToastAndroid.show('Canceled by User', ToastAndroid.SHORT);
-                    break;
-                  case 'storage/unknown':
-                    ToastAndroid.show('Error Unknown', ToastAndroid.SHORT);
-                    break;
-                }
-              },
-              () => {
-                ToastAndroid.show('Sukses Upload avatar!', ToastAndroid.LONG);
-                firebase
-                  .storage()
-                  .refFromURL(
-                    `gs://quychat-bima.appspot.com/images/${uid}/${Image.fileName}`,
-                  )
-                  .getDownloadURL()
-                  .then(url => {
-                    firebaseRN
-                      .database()
-                      .ref(`users/${uid}`)
-                      .update({avatar: url});
-                  });
-              },
-            );
-        };
-      }
-    });
-  };
+  //               // switch (snapshot.state) {
+  //               //   case firebase.storage.TaskState.PAUSED:
+  //               //     ToastAndroid.show('Upload is paused', ToastAndroid.SHORT);
+  //               //     break;
+  //               //   case firebase.storage.TaskState.RUNNING:
+  //               //     ToastAndroid.show(
+  //               //       'Upload is running...',
+  //               //       ToastAndroid.SHORT,
+  //               //     );
+  //               //     break;
+  //               // }
+  //             },
+  //             error => {
+  //               switch (error.code) {
+  //                 case 'storage/unauthorized':
+  //                   ToastAndroid.show('Unauthorized', ToastAndroid.SHORT);
+  //                   break;
+  //                 case 'storage/canceled':
+  //                   ToastAndroid.show('Canceled by User', ToastAndroid.SHORT);
+  //                   break;
+  //                 case 'storage/unknown':
+  //                   ToastAndroid.show('Error Unknown', ToastAndroid.SHORT);
+  //                   break;
+  //               }
+  //             },
+  //             () => {
+  //               ToastAndroid.show('Sukses Upload avatar!', ToastAndroid.LONG);
+  //               firebase
+  //                 .storage()
+  //                 .refFromURL(
+  //                   `gs://quychat-bima.appspot.com/images/${uid}/${Image.fileName}`,
+  //                 )
+  //                 .getDownloadURL()
+  //                 .then(url => {
+  //                   firebaseRN
+  //                     .database()
+  //                     .ref(`users/${uid}`)
+  //                     .update({avatar: url});
+  //                 });
+  //             },
+  //           );
+  //       };
+  //     }
+  //   });
+  // };
 
   __renderButtonEditProfile() {
     if (this.state.isLoading) {
@@ -200,23 +200,10 @@ class EditProfile extends Component {
       );
     } else {
       return (
-        <TouchableOpacity onPress={() => this.updateProfile()}>
-          {/* <Button>
-            <Text style={{color: '#ffff', fontSize: 18}}>Edit Profil</Text>
-          </Button> */}
-          <Button
-            style={{
-              justifyContent: 'center',
-              backgroundColor: '#3076E0',
-              paddingVertical: 10,
-              elevation: 0,
-              height: 60,
-              borderWidth: 0.5,
-              borderColor: 'gray',
-            }}
-            onPress={() => this.UploadImage()}>
-            <Text>Edit Profil</Text>
-          </Button>
+        <TouchableOpacity
+          style={styles.btnEditProfile}
+          onPress={() => this.updateProfile()}>
+          <Text style={{color: '#ffff', fontSize: 18}}>EDIT PROFILE</Text>
         </TouchableOpacity>
       );
     }
@@ -244,7 +231,8 @@ class EditProfile extends Component {
                   </TouchableOpacity>
                 </Col>
                 <Col>
-                  <Text style={{color: '#ffff', fontSize: 20}}>
+                  <Text
+                    style={{color: '#ffff', fontSize: 20, fontWeight: 'bold'}}>
                     Edit Profil
                   </Text>
                 </Col>
@@ -289,7 +277,7 @@ class EditProfile extends Component {
                 onChangeText={val => this.setState({status: val})}
               />
             </Item>
-            <View style={{paddingVertical: 5, marginTop: 20}}>
+            {/* <View style={{paddingVertical: 5, marginTop: 20}}>
               <Button
                 style={{
                   justifyContent: 'center',
@@ -303,7 +291,7 @@ class EditProfile extends Component {
                 onPress={() => this.UploadImage()}>
                 <Text>Edit Profil Avatar</Text>
               </Button>
-            </View>
+            </View> */}
             {this.__renderButtonEditProfile()}
           </View>
         </Content>
@@ -327,6 +315,8 @@ const styles = StyleSheet.create({
     height: 60,
     borderWidth: 0.5,
     borderColor: 'gray',
+    alignItems: 'center',
+    marginTop: 20,
   },
 });
 

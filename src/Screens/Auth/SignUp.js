@@ -222,6 +222,7 @@ class SignUp extends Component {
       phoneNumber: '',
       name: '',
       username: '',
+      status: '',
       longitude: 0,
       latitude: 0,
       initLocation: '',
@@ -316,110 +317,102 @@ class SignUp extends Component {
 
   async handleSignUp() {
     //init state when click
-    this.setState({
-      isError: '',
-      isLoading: true,
-    });
-
     const {
       email,
       password,
       name,
       phoneNumber,
+      status,
       latitude,
       longitude,
     } = this.state;
+    const usersDatabase = 'users/' + this.state.username;
     //init this collection for firebase
     // const user = firebase.auth().currentUser;
-    // const userCollection = `/users/${user.uid}`;
+    // const usersDatabase = `/users/${user.uid}`;
 
     //check if username already in use or not
-    // firebase
-    //   .database()
-    //   .ref(userCollection)
-    //   .on('value', snapshot => {
-    //     console.log(snapshot.val());
-    //     this.setState({
-    //       email: '',
-    //       isError: '',
-    //       isLoading: false,
-    //     });
-    //     if (snapshot.val()) {
-    //       return Toast.show({
-    //         text: 'username telah di gunakan',
-    //         buttonText: 'Ok',
-    //         type: 'danger',
-    //         duration: 2000,
-    //       });
-    //     }
-    //   });
-
-    await firebase
-      .auth()
-      .createUserWithEmailAndPassword(email, password)
-      .then(result => {
-        // const user = firebase.auth().currentUser;
-        const userEdited = this.state.username.replace(/ /g, '_');
-        const userCollection = 'users/' + userEdited;
-        console.log(result);
-        result.user.updateProfile({
-          displayName: this.state.username.replace(/ /g, '_'),
-        });
-        const avatar =
-          `https://ui-avatars.com/api/?size=256&rounded=true&background=${(
-            ((1 << 24) * Math.random()) |
-            0
-          ).toString(16)}&name=` + this.state.username.replace(/ /g, '+');
-        firebase
-          .database()
-          .ref(userCollection)
-          .set({
-            username: this.state.username.replace(/ /g, '_'),
-            email,
-            phoneNumber,
-            name,
-            avatar: avatar,
-            latitude,
-            longitude,
-          })
-          .then(data => {
-            console.log('Data : ', data);
-          })
-          .catch(error => {
-            console.log('error', error);
+    firebase
+      .database()
+      .ref(usersDatabase)
+      .once('value', snapshot => {
+        if (snapshot.val()) {
+          return alert('username sudah dipakai');
+        } else {
+          this.setState({
+            isLoading: true,
           });
-        // console.log(this.state.latitude);
-        Toast.show({
-          text: 'Akun QuyChat berhasil dibuat',
-          buttonText: 'Ok',
-          type: 'success',
-          duration: 2000,
-        });
-        this.setState({
-          email: '',
-          username: '',
-          phoneNumber: '',
-          password: '',
-        });
-        this.props.navigation.navigate('Mate');
-      })
-      .catch(error => {
-        Toast.show({
-          text: error.message,
-          buttonText: 'Ok',
-          type: 'danger',
-          duration: 3000,
-        });
-        this.setState({
-          isLoading: false,
-        });
+          return firebase
+            .auth()
+            .createUserWithEmailAndPassword(email, password)
+            .then(result => {
+              // const user = firebase.auth().currentUser;
+              const userEdited = this.state.username.replace(/ /g, '_');
+              const usersDatabase = 'users/' + userEdited;
+              console.log(result);
+              result.user.updateProfile({
+                displayName: this.state.username.replace(/ /g, '_'),
+              });
+              const avatar =
+                `https://ui-avatars.com/api/?size=256&rounded=true&background=${(
+                  ((1 << 24) * Math.random()) |
+                  0
+                ).toString(16)}&name=` + this.state.username.replace(/ /g, '+');
+              firebase
+                .database()
+                .ref(usersDatabase)
+                .set({
+                  username: this.state.username.replace(/ /g, '_'),
+                  email,
+                  phoneNumber,
+                  name,
+                  status,
+                  avatar: avatar,
+                  latitude,
+                  longitude,
+                })
+                .then(data => {
+                  console.log('Data : ', data);
+                })
+                .catch(error => {
+                  console.log('error', error);
+                });
+              // console.log(this.state.latitude);
+              Toast.show({
+                text: 'Akun QuyChat berhasil dibuat',
+                buttonText: 'Ok',
+                type: 'success',
+                duration: 2000,
+              });
+              this.setState({
+                email: '',
+                username: '',
+                phoneNumber: '',
+                password: '',
+                isLoading: false,
+              });
+              this.props.navigation.navigate('Mate');
+            })
+            .catch(error => {
+              Toast.show({
+                text: error.message,
+                buttonText: 'Ok',
+                type: 'danger',
+                duration: 3000,
+              });
+              this.setState({
+                isLoading: false,
+              });
+            });
+        }
       });
+
     this.setState({
       isLoading: false,
     });
   }
 
-  _renderBtnSignIn = () => {
+  _renderBtnSignUp = () => {
     if (this.state.isLoading === true) {
       return <SkypeIndicator color="#3C82FF" />;
     } else {
@@ -428,7 +421,7 @@ class SignUp extends Component {
           {this.state.email.length > 3 &&
           this.state.password.length > 3 &&
           this.state.phoneNumber.length > 5 &&
-          this.state.username.length > 2 ? (
+          this.state.username.length > 1 ? (
             <Button
               block
               style={{
@@ -436,8 +429,14 @@ class SignUp extends Component {
                 backgroundColor: '#3076E0',
               }}
               onPress={() => this.handleSignUp()}>
+              <Icon name="checkmark-circle-outline" style={{marginRight: 4}} />
               <Text
-                style={{color: '#ffffff', fontWeight: 'bold', fontSize: 18}}>
+                style={{
+                  color: '#ffffff',
+                  fontWeight: 'bold',
+                  fontSize: 18,
+                  marginRight: 10,
+                }}>
                 DAFTAR
               </Text>
             </Button>
@@ -449,8 +448,14 @@ class SignUp extends Component {
                 height: 50,
               }}
               onPress={() => this.handleSignUp()}>
+              <Icon style={{marginRight: 4}} name="hand" />
               <Text
-                style={{color: '#ffffff', fontWeight: 'bold', fontSize: 18}}>
+                style={{
+                  color: '#ffffff',
+                  fontWeight: 'bold',
+                  fontSize: 18,
+                  marginRight: 10,
+                }}>
                 DAFTAR
               </Text>
             </Button>
@@ -550,6 +555,7 @@ class SignUp extends Component {
                 <Input
                   placeholder="password anda"
                   onChangeText={password => this.setState({password})}
+                  secureTextEntry={true}
                 />
                 <Icon
                   name={
@@ -561,7 +567,7 @@ class SignUp extends Component {
               </Item>
             </View>
             <View style={{marginVertical: 20, height: 20}}>
-              {this._renderBtnSignIn()}
+              {this._renderBtnSignUp()}
             </View>
 
             <View

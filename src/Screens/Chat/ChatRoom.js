@@ -12,7 +12,7 @@ import {GiftedChat, Bubble, InputToolbar, Send} from 'react-native-gifted-chat';
 import * as firebase from 'firebase';
 import Menu, {MenuItem, MenuDivider} from 'react-native-material-menu';
 
-const Width = Dimensions.get('window').width;
+// const Width = Dimensions.get('window').width;
 
 class ChatRoom extends Component {
   state = {

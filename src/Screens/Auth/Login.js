@@ -104,25 +104,30 @@ class Login extends Component {
             <Button
               block
               style={{
-                height: 50,
                 backgroundColor: '#3076E0',
               }}
               onPress={this.handleLogin}>
+              <Icon name="checkmark-circle-outline" style={{marginRight: 4}} />
               <Text
-                style={{color: '#ffffff', fontWeight: 'bold', fontSize: 18}}>
+                style={{
+                  color: '#ffffff',
+                  fontWeight: 'bold',
+                  fontSize: 18,
+                  marginRight: 10,
+                }}>
                 MASUK
               </Text>
             </Button>
           ) : (
-            <Button
-              block
-              disabled
-              style={{
-                height: 50,
-              }}
-              onPress={this.handleLogin}>
+            <Button block disabled onPress={this.handleLogin}>
+              <Icon name="hand" style={{marginRight: 4}} />
               <Text
-                style={{color: '#ffffff', fontWeight: 'bold', fontSize: 18}}>
+                style={{
+                  color: '#ffffff',
+                  fontWeight: 'bold',
+                  fontSize: 18,
+                  marginRight: 10,
+                }}>
                 MASUK
               </Text>
             </Button>
@@ -132,8 +137,8 @@ class Login extends Component {
     }
   };
 
-  onChangeTextEmail = email => this.setState({email});
-  onChangeTextPassword = password => this.setState({password});
+  // onChangeTextEmail = email => this.setState({email});
+  // onChangeTextPassword = password => this.setState({password});
 
   render() {
     return (

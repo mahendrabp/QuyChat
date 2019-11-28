@@ -92,27 +92,8 @@ class ListMate extends Component {
           </View>
         </Header>
         <Content>
-          <View style={styles.contentSearch}>
-            <Item
-              style={{
-                backgroundColor: '#40A4D3',
-                borderRadius: 100,
-                borderColor: 'transparent',
-              }}>
-              <Input
-                placeholder="cari mates ...."
-                placeholderTextColor="#FFFFFF"
-                style={{color: '#FFFFFF', height: 40, marginLeft: 15}}
-              />
-              <Icon
-                active
-                name="search"
-                style={{color: '#FFFFFF', marginRight: 15}}
-              />
-            </Item>
-          </View>
           <View style={styles.contentChats}>
-            <View style={styles.contentMyContat}>
+            <View style={styles.contentStatus}>
               {/* <Text
                 style={{
                   paddingHorizontal: 10,
@@ -134,16 +115,13 @@ class ListMate extends Component {
               </List> */}
             </View>
             <View style={{paddingVertical: 20}}>
-              <Text
-                style={{
-                  paddingHorizontal: 10,
-                  color: '#252d39',
-                  fontWeight: 'bold',
-                }}>
-                Mates ku
-              </Text>
               {Object.keys(this.state.mates)
-                .filter(val => this.state.mates[val].email !== this.state.email)
+                .filter(
+                  val =>
+                    this.state.mates[val].email !== this.state.email &&
+                    this.state.mates[val].status !== '' &&
+                    this.state.mates[val].status !== null,
+                )
                 .map(key => {
                   return (
                     <>
@@ -152,7 +130,7 @@ class ListMate extends Component {
                           avatar
                           button={true}
                           onPress={() =>
-                            this.props.navigation.navigate('MateProfile', {
+                            this.props.navigation.navigate('ChatRoom', {
                               username: this.state.mates[key].username,
                               email: this.state.mates[key].email,
                               avatar: this.state.mates[key].avatar,
@@ -183,17 +161,12 @@ class ListMate extends Component {
 }
 
 const styles = StyleSheet.create({
-  contentSearch: {
-    backgroundColor: '#1F95CC',
-    paddingBottom: 15,
-    paddingHorizontal: 15,
-  },
   contentChats: {
     flex: 1,
     paddingHorizontal: 5,
     paddingVertical: 5,
   },
-  contentMyContat: {
+  contentStatus: {
     paddingRight: 10,
   },
 });
