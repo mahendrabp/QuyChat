@@ -270,29 +270,3 @@ const styles = StyleSheet.create({
 });
 
 export default ListChat;
-
-{
-  /* <List>
-  <ListItem
-    avatar
-    noBorder
-    button={true}
-    onPress={() =>
-      this.props.navigation.navigate('ChatRoom', {
-        username: this.state.users[key].username,
-      })
-    }>
-    <Left>
-      <Thumbnail source={{uri: `${this.state.users[key].avatar}`}} />
-    </Left>
-    <Body>
-      <Text>{this.state.users[key].username}</Text>
-      <Text note>{this.state.users[key].email}</Text>
-      <Text note>{this.state.users[key].status}.</Text>
-    </Body>
-    <Right style={{justifyContent: 'center'}}>
-      <Text note>{item.date}</Text>
-    </Right>
-  </ListItem>
-</List> */
-}

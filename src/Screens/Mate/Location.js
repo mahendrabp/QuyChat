@@ -29,7 +29,7 @@ class Location extends Component {
       position => {
         const initLocation = JSON.stringify(position);
         this.setState({
-          initLocation: initLocation,
+          initLocation,
           // latitude: position.coords.latitude,
           // longitude: position.coords.longitude,
         });
@@ -59,7 +59,6 @@ class Location extends Component {
           style={{backgroundColor: '#1F95CC'}}
           androidStatusBarColor="#1F95CC"
           noShadow={true}></Header>
-
         <MapView
           ref={ref => (mateMap = ref)}
           style={{position: 'absolute', top: 0, right: 0, bottom: 0, left: 0}}

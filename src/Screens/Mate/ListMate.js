@@ -148,7 +148,14 @@ class ListMate extends Component {
                           </Left>
                           <Body style={{marginTop: 7}}>
                             {/* <Text>{this.state.mates[key].username}</Text> */}
-                            <Text>{this.state.mates[key].name}</Text>
+                            <Text
+                              style={{
+                                fontWeight: '700',
+                                fontSize: 16,
+                                color: '#4C5055',
+                              }}>
+                              {this.state.mates[key].name}
+                            </Text>
                             <Row style={{alignContent: 'space-between'}}>
                               <Col style={{width: 150}}>
                                 <Text note>{this.state.mates[key].status}</Text>

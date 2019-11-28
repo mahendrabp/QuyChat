@@ -164,7 +164,7 @@ class Profile extends Component {
           </View>
         </Header>
         <Content>
-          <View style={styles.contentMore}>
+          <View style={styles.contentProfile}>
             <Grid>
               <Row style={{paddingVertical: 10}}>
                 <Col style={{alignItems: 'center'}}>
@@ -190,7 +190,7 @@ class Profile extends Component {
               </Row>
             </Grid>
           </View>
-          <View style={styles.contentSetting}>
+          <View style={styles.contentSet}>
             <TouchableOpacity
               onPress={() => this.props.navigation.navigate('EditProfile')}>
               <Grid>
@@ -232,7 +232,7 @@ class Profile extends Component {
 }
 
 const styles = StyleSheet.create({
-  contentMore: {
+  contentProfile: {
     flex: 1,
     paddingHorizontal: 7,
     paddingTop: -10,
@@ -242,7 +242,7 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 55,
     color: 'white',
   },
-  contentSetting: {
+  contentSet: {
     flex: 1,
     paddingHorizontal: 25,
     paddingVertical: 7,

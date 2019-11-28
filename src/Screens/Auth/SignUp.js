@@ -87,8 +87,8 @@ class SignUp extends Component {
         });
       },
       error => {
-        // console.log(error);
-        Alert.alert(error.message);
+        console.log(error.message);
+        // Alert.alert(error.message);
       },
       {enableHighAccuracy: true, distanceFilter: 1},
     );

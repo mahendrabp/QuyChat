@@ -45,7 +45,6 @@ class ChatRoom extends Component {
       name: firebase.auth().currentUser.displayName,
       email: firebase.auth().currentUser.email,
       avatar: firebase.auth().currentUser.photoURL,
-      // phoneNumber: firebase.auth().currentUser.phoneNumber,
       _id: firebase.auth().currentUser.uid,
     };
   };
@@ -99,15 +98,17 @@ class ChatRoom extends Component {
                 name: child.val().user.name,
               },
             },
+            //spread operator, jika ini dihapus, maka pesan akan munncul hanya satu
             ...data,
           ];
         });
         this.setState({Messages: data});
-        console.log(data);
+        // console.log(data);
       });
   }
 
   async getDatauser() {
+    //get user lain/tujuan
     const userCollection = 'users/' + this.state.displayName;
     await firebase
       .database()

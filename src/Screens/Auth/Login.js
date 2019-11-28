@@ -95,7 +95,7 @@ class Login extends Component {
   };
 
   _renderBtnSignIn = () => {
-    if (this.state.isLoading == true) {
+    if (this.state.isLoading === true) {
       return <SkypeIndicator color="#3C82FF" />;
     } else {
       return (
@@ -136,9 +136,6 @@ class Login extends Component {
       );
     }
   };
-
-  // onChangeTextEmail = email => this.setState({email});
-  // onChangeTextPassword = password => this.setState({password});
 
   render() {
     return (

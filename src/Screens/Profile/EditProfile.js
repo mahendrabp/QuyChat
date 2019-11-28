@@ -278,21 +278,6 @@ class EditProfile extends Component {
                 onChangeText={val => this.setState({status: val})}
               />
             </Item>
-            {/* <View style={{paddingVertical: 5, marginTop: 20}}>
-              <Button
-                style={{
-                  justifyContent: 'center',
-                  backgroundColor: '#2c2f33',
-                  paddingVertical: 10,
-                  elevation: 0,
-                  height: 60,
-                  borderWidth: 0.5,
-                  borderColor: 'gray',
-                }}
-                onPress={() => this.UploadImage()}>
-                <Text>Edit Profil Avatar</Text>
-              </Button>
-            </View> */}
             {this.__renderButtonEditProfile()}
           </View>
         </Content>
