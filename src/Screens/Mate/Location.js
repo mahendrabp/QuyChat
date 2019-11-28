@@ -11,10 +11,6 @@ class Location extends Component {
     super(props);
     this.state = {
       username: '',
-      email: '',
-      avatar: '',
-      status: '',
-      mates: [],
       latitude: -6.6194727,
       longitude: 106.8241719,
       initLocation: 'n/a',
@@ -65,26 +61,55 @@ class Location extends Component {
           noShadow={true}></Header>
 
         <MapView
-          style={{
-            position: 'absolute',
-            width: '100%',
-            height: '100%',
-          }}
+          ref={ref => (mateMap = ref)}
+          style={{position: 'absolute', top: 0, right: 0, bottom: 0, left: 0}}
           region={{
             latitude: this.state.latitude,
             longitude: this.state.longitude,
-            latitudeDelta: 0.01,
-            longitudeDelta: 0.01,
+            latitudeDelta: 0.015,
+            longitudeDelta: 0.0121,
           }}>
+          <Marker
+            coordinate={{
+              latitude: this.props.navigation.getParam('latitude'),
+              longitude: this.props.navigation.getParam('longitude'),
+            }}
+            title={this.props.navigation.getParam('username')}
+            description={'lokasi' + this.props.navigation.getParam('username')}
+            onPress={() => {
+              mateMap.fitToCoordinates(
+                [
+                  {
+                    latitude: this.props.navigation.getParam('latitude'),
+                    longitude: this.props.navigation.getParam('longitude'),
+                  },
+                ],
+                {
+                  animated: true, // optional
+                },
+              );
+            }}
+          />
           <Marker
             coordinate={{
               latitude: this.state.latitude,
               longitude: this.state.longitude,
-              latitudeDelta: 0.01,
-              longitudeDelta: 0.01,
             }}
-            title={'test title'}
-            description={'test desc'}
+            title="Aku"
+            description="lokasi kamu sekarag disini"
+            onPress={() => {
+              mateMap.fitToCoordinates(
+                [
+                  {
+                    latitude: this.state.latitude,
+                    longitude: this.state.longitude,
+                  },
+                ],
+                {
+                  animated: true, // optional
+                },
+              );
+            }}
           />
         </MapView>
         <View style={{marginLeft: 20}}>

@@ -67,7 +67,7 @@ const TabNavigation = createMaterialBottomTabNavigator(
     },
   },
   {
-    activeColor: '#3C82FF',
+    activeColor: '#1F95CC',
     inactiveColor: '#979797',
     barStyle: {backgroundColor: '#fff'},
   },

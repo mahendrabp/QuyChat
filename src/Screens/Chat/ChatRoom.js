@@ -24,6 +24,7 @@ class ChatRoom extends Component {
     id: '',
     emailUser: '',
     avatarUser: '',
+    status: '',
   };
 
   async componentWillMount() {
@@ -38,7 +39,7 @@ class ChatRoom extends Component {
     this.getDatauser();
   }
 
-  //user data ours login account
+  //get our data from login with email password firebase
   userData = () => {
     return {
       name: firebase.auth().currentUser.displayName,
@@ -57,6 +58,9 @@ class ChatRoom extends Component {
         user,
         createdAt: firebase.database.ServerValue.TIMESTAMP,
       };
+
+      //onSend = push to database with message variable
+      //https://github.com/FaridSafi/react-native-gifted-chat/issues/1013
       await firebase
         .database()
         .ref(`Messages/${this.state.name}/${this.state.displayName}`)
@@ -71,6 +75,8 @@ class ChatRoom extends Component {
   getMessage() {
     firebase
       .database()
+      //if we want get message from login user to receiver
+      //kita sebagai currentUser yang login
       .ref(
         'Messages/' +
           firebase.auth().currentUser.displayName +
@@ -78,9 +84,11 @@ class ChatRoom extends Component {
           this.props.navigation.getParam('username') +
           '/',
       )
+      //value itu mengambil semua value snapshot
       .on('value', snapshot => {
         let data = [];
         snapshot.forEach(child => {
+          console.log(child);
           data = [
             {
               _id: child.key,
@@ -95,6 +103,7 @@ class ChatRoom extends Component {
           ];
         });
         this.setState({Messages: data});
+        console.log(data);
       });
   }
 
@@ -110,6 +119,7 @@ class ChatRoom extends Component {
           longitude: data.val().longitude,
           emailUser: data.val().email,
           avatarUser: data.val().avatar,
+          status: data.val().status,
         });
       });
   }
@@ -203,7 +213,8 @@ class ChatRoom extends Component {
                 </Col>
                 <Col>
                   <Text style={{color: '#ffff', fontSize: 20}}>
-                    {this.state.displayName}
+                    {/* {this.state.displayName} */}
+                    {this.props.navigation.getParam('name').substring(0, 10)}
                   </Text>
                 </Col>
                 <Col>
@@ -257,6 +268,7 @@ class ChatRoom extends Component {
                                 username: this.state.displayName,
                                 email: this.state.emailUser,
                                 avatar: this.state.avatarUser,
+                                status: this.state.status,
                                 latitude: this.state.latitude,
                                 longitude: this.state.longitude,
                               });
@@ -290,15 +302,6 @@ class ChatRoom extends Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  contentChatRoom: {
-    flex: 1,
-    backgroundColor: '#eff3f6',
-    paddingVertical: 15,
-    paddingHorizontal: 10,
-  },
-});
 
 export default ChatRoom;
 

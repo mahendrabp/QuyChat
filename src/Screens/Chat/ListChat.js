@@ -93,12 +93,12 @@ class ListChat extends Component {
 
   render() {
     return (
-      <Container>
+      <Container style={{backgroundColor: '#1F95CC'}}>
         <Header
           style={{backgroundColor: '#1F95CC'}}
           androidStatusBarColor="#1F95CC"
           noShadow={true}>
-          <View style={{flex: 1, paddingTop: 15}}>
+          <View style={{flex: 1, paddingTop: 15, borderRadius: 1000}}>
             <Grid>
               <Row>
                 <Col>
@@ -131,7 +131,12 @@ class ListChat extends Component {
             </Grid>
           </View>
         </Header>
-        <Content>
+        <Content
+          style={{
+            // height: 100,
+            backgroundColor: 'white',
+            borderTopLeftRadius: 180,
+          }}>
           <View style={styles.contentSearch}>
             <Item
               style={{
@@ -161,12 +166,13 @@ class ListChat extends Component {
               .map(key => {
                 return (
                   <>
-                    <View>
+                    <View key={this.state.users[key]}>
                       <TouchableRipple
-                        key={this.state.users[key].uid}
+                        key={this.state.users[key]}
                         onPress={() =>
                           this.props.navigation.navigate('ChatRoom', {
                             username: this.state.users[key].username,
+                            name: this.state.users[key].name,
                             latitude: this.state.users[key].latitude,
                             longitude: this.state.users[key].longitude,
                           })
@@ -195,7 +201,8 @@ class ListChat extends Component {
                           </Col>
                           <Col size={3}>
                             <Text style={styles.name}>
-                              {this.state.users[key].username}
+                              {/* {this.state.users[key].username} */}
+                              {this.state.users[key].name}
                             </Text>
                             <Text style={{fontSize: 16, color: '#bcbdc6'}}>
                               {this.state.users[key].email.toLowerCase()}
@@ -237,10 +244,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
   },
   contentChats: {
-    flex: 1,
+    display: 'flex',
     paddingHorizontal: 5,
     paddingVertical: 5,
     // backgroundColor: '#242A31',
+    // borderTopStartRadius: 50,
+    marginTop: '1%',
   },
   touchable: {paddingHorizontal: 10, paddingVertical: 2},
   item: {flex: 1, flexDirection: 'row', height: 70, alignItems: 'center'},

@@ -95,6 +95,7 @@ class EditProfile extends Component {
         phoneNumber: this.state.phoneNumber,
         username: this.state.username,
         name: this.state.name,
+        update: Date.now(),
       });
     this.setState({
       isLoading: false,

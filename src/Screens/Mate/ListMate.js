@@ -17,6 +17,9 @@ import {
   Thumbnail,
   Body,
 } from 'native-base';
+import moment from 'moment';
+// import 'moment-timezone';
+import 'moment/locale/id';
 
 import * as firebase from 'firebase';
 // import Geolocation from '@react-native-community/geolocation';
@@ -114,7 +117,7 @@ class ListMate extends Component {
                 </ListItem>
               </List> */}
             </View>
-            <View style={{paddingVertical: 20}}>
+            <View style={{paddingVertical: 10}}>
               {Object.keys(this.state.mates)
                 .filter(
                   val =>
@@ -143,9 +146,21 @@ class ListMate extends Component {
                               }}
                             />
                           </Left>
-                          <Body style={{marginTop: 10}}>
-                            <Text>{this.state.mates[key].username}</Text>
-                            <Text note>{this.state.mates[key].status}</Text>
+                          <Body style={{marginTop: 7}}>
+                            {/* <Text>{this.state.mates[key].username}</Text> */}
+                            <Text>{this.state.mates[key].name}</Text>
+                            <Row style={{alignContent: 'space-between'}}>
+                              <Col style={{width: 150}}>
+                                <Text note>{this.state.mates[key].status}</Text>
+                              </Col>
+                              <Col style={{flex: 1, alignItems: 'flex-end'}}>
+                                <Text note>
+                                  {moment(this.state.mates[key].update).fromNow(
+                                    true,
+                                  )}
+                                </Text>
+                              </Col>
+                            </Row>
                           </Body>
                         </ListItem>
                       </List>

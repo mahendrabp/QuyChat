@@ -151,17 +151,25 @@ class Profile extends Component {
           style={{backgroundColor: '#1F95CC'}}
           androidStatusBarColor="#1F95CC"
           noShadow={true}>
-          <View style={{flex: 1, paddingVertical: 15, paddingHorizontal: 7}}>
-            <Text style={{color: '#ffff', fontSize: 20}}>Profil</Text>
+          <View
+            style={{
+              flex: 1,
+              paddingVertical: 15,
+              paddingHorizontal: 7,
+              marginLeft: '4%',
+            }}>
+            <Text style={{color: '#ffff', fontSize: 20, fontWeight: 'bold'}}>
+              Profil
+            </Text>
           </View>
         </Header>
         <Content>
           <View style={styles.contentMore}>
             <Grid>
-              <Row style={{paddingVertical: 15}}>
+              <Row style={{paddingVertical: 10}}>
                 <Col style={{alignItems: 'center'}}>
                   <TouchableOpacity onPress={() => this.UploadImage()}>
-                    <Thumbnail source={{uri: `${this.state.avatar}`}} />
+                    <Thumbnail large source={{uri: `${this.state.avatar}`}} />
                   </TouchableOpacity>
                 </Col>
               </Row>
@@ -227,7 +235,8 @@ const styles = StyleSheet.create({
   contentMore: {
     flex: 1,
     paddingHorizontal: 7,
-    paddingVertical: 40,
+    paddingTop: -10,
+    paddingBottom: 40,
     backgroundColor: '#1F95CC',
     borderBottomLeftRadius: 55,
     borderBottomRightRadius: 55,

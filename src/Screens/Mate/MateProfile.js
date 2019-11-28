@@ -14,6 +14,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as firebase from 'firebase';
 import MapView, {Marker} from 'react-native-maps';
+import {SkypeIndicator} from 'react-native-indicators';
 class MateProfile extends Component {
   constructor(props) {
     super(props);
@@ -53,6 +54,57 @@ class MateProfile extends Component {
     console.log(this.state.phoneNumber);
   }
 
+  _renderMap = () => {
+    let mateMap;
+    if (this.state.latitude === null || this.state.latitude === '') {
+      return <SkypeIndicator color="#3C82FF" />;
+    } else {
+      return (
+        <>
+          <MapView
+            ref={ref => (mateMap = ref)}
+            style={{
+              width: 400,
+              height: 250,
+              marginLeft: 20,
+              borderTopLeftRadius: 55,
+              borderTopRightRadius: 55,
+            }}
+            region={{
+              latitude: this.state.latitude,
+              longitude: this.state.longitude,
+              latitudeDelta: 0.01,
+              longitudeDelta: 0.01,
+            }}>
+            <Marker
+              coordinate={{
+                latitude: this.props.navigation.getParam('latitude'),
+                longitude: this.props.navigation.getParam('longitude'),
+              }}
+              title={this.props.navigation.getParam('username')}
+              description={
+                'lokasi' + this.props.navigation.getParam('username')
+              }
+              onPress={() => {
+                mateMap.fitToCoordinates(
+                  [
+                    {
+                      latitude: this.props.navigation.getParam('latitude'),
+                      longitude: this.props.navigation.getParam('longitude'),
+                    },
+                  ],
+                  {
+                    animated: true, // optional
+                  },
+                );
+              }}
+            />
+          </MapView>
+        </>
+      );
+    }
+  };
+
   callPhone() {
     let phoneNumber = `tel:${this.state.phoneNumber}`;
     Linking.openURL(phoneNumber);
@@ -90,9 +142,9 @@ class MateProfile extends Component {
         <Content>
           <View style={styles.content}>
             <Grid>
-              <Row style={{paddingVertical: 15}}>
+              <Row style={{paddingVertical: 5}}>
                 <Col style={{alignItems: 'center'}}>
-                  <Thumbnail source={{uri: `${this.state.avatar}`}} />
+                  <Thumbnail large source={{uri: `${this.state.avatar}`}} />
                 </Col>
               </Row>
               <Row>
@@ -122,7 +174,7 @@ class MateProfile extends Component {
                   username: this.state.username,
                 })
               }>
-              <Grid>
+              <Grid style={{marginTop: 20}}>
                 <Row style={{paddingVertical: 10}}>
                   <Col
                     style={{
@@ -172,7 +224,7 @@ class MateProfile extends Component {
             borderTopColor: '#1F95CC',
             borderTopWidth: 2,
           }}>
-          <MapView
+          {/* <MapView
             style={{
               width: 400,
               height: 250,
@@ -196,7 +248,8 @@ class MateProfile extends Component {
               title={this.state.username + ' ada disini nih'}
               // description={'test desc'}
             />
-          </MapView>
+          </MapView> */}
+          {this._renderMap()}
         </View>
       </Container>
     );
@@ -207,7 +260,8 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     paddingHorizontal: 7,
-    paddingVertical: 40,
+    paddingTop: 20,
+    paddingBottom: 40,
     backgroundColor: '#1F95CC',
     borderBottomLeftRadius: 55,
     borderBottomRightRadius: 55,
