@@ -147,8 +147,10 @@ class SignUp extends Component {
     //init this collection for firebase
     // const user = firebase.auth().currentUser;
     // const usersDatabase = `/users/${user.uid}`;
-
-    //check if username already in use or not
+    this.setState({
+      isLoading: true,
+    });
+    //check if username already  use or not
     firebase
       .database()
       .ref(usersDatabase)
@@ -263,8 +265,7 @@ class SignUp extends Component {
               disabled
               style={{
                 height: 50,
-              }}
-              onPress={() => this.handleSignUp()}>
+              }}>
               <Icon style={{marginRight: 4}} name="hand" />
               <Text
                 style={{

@@ -17,6 +17,7 @@ import Location from './Screens/Mate//Location';
 import MateProfile from './Screens/Mate/MateProfile';
 import Profile from './Screens/Profile/Profile';
 import EditProfile from './Screens/Profile/EditProfile';
+import Other from './Screens/Other/Other';
 
 const TabNavigation = createMaterialBottomTabNavigator(
   {
@@ -119,6 +120,12 @@ const MainNavigator = createStackNavigator(
     },
     EditProfile: {
       screen: EditProfile,
+      navigationOptions: {
+        header: null,
+      },
+    },
+    Other: {
+      screen: Other,
       navigationOptions: {
         header: null,
       },

@@ -14,7 +14,7 @@ import {
 } from 'native-base';
 import * as firebase from 'firebase';
 import Menu, {MenuItem, MenuDivider} from 'react-native-material-menu';
-import {Avatar, Divider, TouchableRipple} from 'react-native-paper';
+import {Avatar, Divider, TouchableRipple, Badge} from 'react-native-paper';
 
 class ListChat extends Component {
   constructor(props) {
@@ -47,7 +47,7 @@ class ListChat extends Component {
   };
 
   async getData() {
-    console.log(firebase.auth().currentUser);
+    // console.log(firebase.auth().currentUser);
     this.setState({
       username: firebase.auth().currentUser.displayName,
       email: firebase.auth().currentUser.email,
@@ -57,7 +57,7 @@ class ListChat extends Component {
       .ref('users/')
       .on('value', snapshot => {
         const set = snapshot.val();
-        console.log(set);
+        // console.log(set);
         this.setState({
           users: set,
         });
@@ -89,7 +89,7 @@ class ListChat extends Component {
 
   componentDidMount() {
     this.getData();
-    console.log(this.state.users);
+    // console.log(this.state.users);
   }
 
   render() {
@@ -124,9 +124,21 @@ class ListChat extends Component {
                       onPress={this.showMenu}
                     />
                   }>
-                  <MenuItem onPress={this.hideMenu}>Grup Baru</MenuItem>
+                  <MenuItem
+                    onPress={() => {
+                      this.hideMenu();
+                      this.props.navigation.navigate('Other');
+                    }}>
+                    Grup Baru
+                  </MenuItem>
                   <MenuDivider />
-                  <MenuItem onPress={this.hideMenu}>Pengaturan</MenuItem>
+                  <MenuItem
+                    onPress={() => {
+                      this.hideMenu();
+                      this.props.navigation.navigate('Other');
+                    }}>
+                    Pengaturan
+                  </MenuItem>
                 </Menu>
               </Row>
             </Grid>
@@ -173,11 +185,12 @@ class ListChat extends Component {
                       ),
               )
               .map(key => {
-                console.log(key);
+                // console.log(key);
                 return (
                   <>
                     <View key={this.state.users[key]}>
                       <TouchableRipple
+                        rippleColor="#1F95CC"
                         key={this.state.users[key]}
                         onPress={() =>
                           this.props.navigation.navigate('ChatRoom', {
@@ -215,7 +228,7 @@ class ListChat extends Component {
                               {this.state.users[key].name}
                             </Text>
                             <Text style={{fontSize: 16, color: '#bcbdc6'}}>
-                              {this.state.users[key].text}
+                              {this.state.users[key].email.toLowerCase()}
                             </Text>
                             {/* {this.getMessage(key)} */}
                             {/* <Text>{this.state.text}</Text> */}
@@ -223,13 +236,11 @@ class ListChat extends Component {
                           <Col size={1}>
                             <Row style={{alignItems: 'center'}}>
                               <Col style={{alignItems: 'center'}}>
-                                <Text
-                                  style={{
-                                    fontSize: 15,
-                                    color: '#bcbdc6',
-                                  }}>
+                                <Badge
+                                  size={25}
+                                  style={{backgroundColor: 'green'}}>
                                   online
-                                </Text>
+                                </Badge>
                               </Col>
                             </Row>
                           </Col>

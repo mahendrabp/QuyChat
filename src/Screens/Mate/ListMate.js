@@ -20,6 +20,7 @@ import {
 import moment from 'moment';
 // import 'moment-timezone';
 import 'moment/locale/id';
+import {NavigationEvents} from 'react-navigation';
 
 import * as firebase from 'firebase';
 // import Geolocation from '@react-native-community/geolocation';
@@ -70,6 +71,7 @@ class ListMate extends Component {
   render() {
     return (
       <Container>
+        <NavigationEvents onDidFocus={() => this.getMates()} />
         <Header
           style={{backgroundColor: '#1F95CC'}}
           androidStatusBarColor="#1F95CC"
@@ -137,6 +139,7 @@ class ListMate extends Component {
                               username: this.state.mates[key].username,
                               email: this.state.mates[key].email,
                               avatar: this.state.mates[key].avatar,
+                              name: this.state.mates[key].name,
                             })
                           }>
                           <Left>

@@ -15,6 +15,7 @@ import {
   Col,
   Row,
   Thumbnail,
+  Toast,
 } from 'native-base';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 // import * as firebase from 'firebase';
@@ -62,6 +63,8 @@ class Profile extends Component {
       if (response.uri) {
         const Image = response;
         this.setState({imageName: Image.fileName});
+        console.log(response);
+        console.log(response.uri);
 
         Alert.alert(
           'Ganti Avatar',
@@ -73,13 +76,13 @@ class Profile extends Component {
           {cancelable: false},
         );
 
-        const uid = firebaseRN.auth().currentUser.displayName;
+        const uname = firebaseRN.auth().currentUser.displayName;
 
         const upload = () => {
           firebase
             .storage()
             .ref()
-            .child(`images/${uid}/${Image.fileName}`)
+            .child(`images/${uname}/${Image.fileName}`)
             .putFile(Image.path)
             .on(
               firebase.storage.TaskEvent.STATE_CHANGED,
@@ -91,17 +94,17 @@ class Profile extends Component {
                   ToastAndroid.SHORT,
                 );
 
-                // switch (snapshot.state) {
-                //   case firebase.storage.TaskState.PAUSED:
-                //     ToastAndroid.show('Upload is paused', ToastAndroid.SHORT);
-                //     break;
-                //   case firebase.storage.TaskState.RUNNING:
-                //     ToastAndroid.show(
-                //       'Upload is running...',
-                //       ToastAndroid.SHORT,
-                //     );
-                //     break;
-                // }
+                switch (snapshot.state) {
+                  case firebase.storage.TaskState.PAUSED:
+                    ToastAndroid.show('Upload is paused', ToastAndroid.SHORT);
+                    break;
+                  case firebase.storage.TaskState.RUNNING:
+                    ToastAndroid.show(
+                      'Upload is running...',
+                      ToastAndroid.SHORT,
+                    );
+                    break;
+                }
               },
               error => {
                 switch (error.code) {
@@ -122,13 +125,13 @@ class Profile extends Component {
                 firebase
                   .storage()
                   .refFromURL(
-                    `gs://quychat-bima.appspot.com/images/${uid}/${Image.fileName}`,
+                    `gs://quychat-bima.appspot.com/images/${uname}/${Image.fileName}`,
                   )
                   .getDownloadURL()
                   .then(url => {
                     firebaseRN
                       .database()
-                      .ref(`users/${uid}`)
+                      .ref(`users/${uname}`)
                       .update({avatar: url});
                   });
               },
@@ -138,8 +141,38 @@ class Profile extends Component {
     });
   };
   async logout() {
-    await firebaseRN.auth().signOut();
-    this.props.navigation.replace('Login');
+    // await firebaseRN.auth().signOut();
+    // this.props.navigation.replace('Login');
+
+    Alert.alert(
+      'Keluar',
+      'yakin mau keluar?',
+      [
+        {text: 'No', style: 'cancel'},
+        {text: 'Yes', onPress: () => out()},
+      ],
+      {cancelable: false},
+    );
+
+    const out = () => {
+      firebaseRN
+        .auth()
+        .signOut()
+        .then(() => {
+          Toast.show({
+            text: 'Berhasil Logout',
+            duration: 800,
+          });
+          this.props.navigation.replace('Login');
+        })
+        .catch(err => {
+          Toast.show({
+            text: err.message,
+            type: 'danger',
+            duration: 800,
+          });
+        });
+    };
     console.log('Logged out!');
   }
 
