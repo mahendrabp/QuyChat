@@ -74,7 +74,7 @@ class Location extends Component {
               longitude: this.props.navigation.getParam('longitude'),
             }}
             title={this.props.navigation.getParam('username')}
-            description={'lokasi' + this.props.navigation.getParam('username')}
+            description={'lokasi ' + this.props.navigation.getParam('username')}
             onPress={() => {
               mateMap.fitToCoordinates(
                 [
@@ -95,7 +95,7 @@ class Location extends Component {
               longitude: this.state.longitude,
             }}
             title="Aku"
-            description="lokasi kamu sekarag disini"
+            description="lokasi kamu sekarang disini"
             onPress={() => {
               mateMap.fitToCoordinates(
                 [

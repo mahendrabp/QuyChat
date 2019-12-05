@@ -272,6 +272,8 @@ class EditProfile extends Component {
             </Item>
             <Item regular>
               <Input
+                multiline={true}
+                numberOfLines={3}
                 style={{color: '#252d39'}}
                 placeholder={'update status'}
                 value={this.state.status}

@@ -33,6 +33,7 @@ class Login extends Component {
       phone: '',
       isError: '',
       isLoading: false,
+      isEmailValid: true,
     };
   }
 
@@ -171,25 +172,27 @@ class Login extends Component {
               style={{borderWidth: 100}}
               success={!this.state.isEmailValid ? false : true}
               error={!this.state.isEmailValid ? true : false}>
-              <Input
-                placeholder="email anda"
-                onChangeText={email => this.onChangeEmail(email)}
-                onSubmitEditing={() => this.handleLogin}
-              />
               <Icon
                 name={!this.state.isEmailValid ? 'md-mail' : 'checkmark-circle'}
+              />
+              <Input
+                textContentType="emailAddress"
+                placeholder="email"
+                onChangeText={email => this.onChangeEmail(email)}
+                onSubmitEditing={() => this.handleLogin}
               />
             </Item>
           </View>
           <View>
             <Item regular success last>
+              <Icon name="md-key" />
               <Input
+                textContentType="password"
                 secureTextEntry={true}
-                placeholder="password anda"
+                placeholder="password"
                 onChangeText={password => this.setState({password})}
                 onSubmitEditing={() => this.handleLogin}
               />
-              <Icon name="md-key" />
             </Item>
           </View>
           <View style={{marginVertical: 20, height: 20}}>
